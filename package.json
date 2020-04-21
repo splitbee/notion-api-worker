@@ -1,7 +1,21 @@
 {
   "name": "notion-cloudflare-worker",
-  "version": "1.0.0",
-  "main": "index.js",
-  "author": "Tobias Lins",
-  "license": "MIT"
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack",
+    "dev": "wrangler preview --watch",
+    "deploy": "wrangler publish -e production"
+  },
+  "dependencies": {
+    "tiny-request-router": "^1.2.2"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^1.0.9",
+    "@types/node": "^13.13.1",
+    "prettier": "^2.0.4",
+    "ts-loader": "^7.0.1",
+    "typescript": "^3.8.3"
+  }
 }
