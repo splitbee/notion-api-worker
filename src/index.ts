@@ -4,6 +4,7 @@ import { Router, Method, Params } from "tiny-request-router";
 import { pageRoute } from "./routes/page";
 import { tableRoute } from "./routes/table";
 import { userRoute } from "./routes/user";
+import { createResponse } from "./response";
 
 export type Handler = (params: Params) => Promise<Response> | Response;
 
@@ -14,17 +15,15 @@ router.get("/v1/page/:pageId", pageRoute);
 router.get("/v1/table/:pageId", tableRoute);
 router.get("/v1/user/:userId", userRoute);
 
-router.get(
-  "*",
-  async () =>
-    new Response(
-      `Route not found!
-Available routes: 
- - /v1/page/:pageId
- - /v1/table/:pageId
- - /v1/user/:pageId`,
-      { status: 404 }
-    )
+router.get("*", async () =>
+  createResponse(
+    JSON.stringify({
+      error: `Route not found!`,
+      routes: ["/v1/page/:pageId", "/v1/table/:pageId", " /v1/user/:pageId"],
+    }),
+    {},
+    404
+  )
 );
 
 const cache = (caches as any).default;

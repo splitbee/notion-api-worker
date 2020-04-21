@@ -9,7 +9,11 @@ export async function tableRoute(params: Params) {
   const page = await fetchPageById(pageId);
 
   if (!page.recordMap.collection)
-    return new Response("No table found on Notion page: " + pageId);
+    return createResponse(
+      JSON.stringify({ error: "No table found on Notion page: " + pageId }),
+      {},
+      401
+    );
 
   const collection: CollectionType = Object.keys(page.recordMap.collection).map(
     (k) => page.recordMap.collection[k]
