@@ -1,0 +1,7 @@
+{
+  "name": "notion-cloudflare-worker",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Tobias Lins",
+  "license": "MIT"
+}
