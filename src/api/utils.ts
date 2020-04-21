@@ -31,7 +31,7 @@ export const getNotionValue = (
     case "select":
       return val[0][0];
     case "multi_select":
-      return val[0] as string[];
+      return val[0][0].split(",") as string[];
     case "number":
       return Number(val[0][0]);
     default:

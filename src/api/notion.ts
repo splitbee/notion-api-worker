@@ -1,5 +1,3 @@
-import { resolve } from "dns";
-
 const NOTION_API = "https://www.notion.so/api/v3";
 
 type JSONData =
@@ -29,7 +27,6 @@ const fetchNotionData = async ({ resource, body }: INotionParams) => {
       "content-type": "application/json",
     },
     body: JSON.stringify(body),
-    //cf: {}
   });
 
   return res.json();
@@ -74,7 +71,7 @@ export const fetchTableData = async (
   return table;
 };
 
-export const fetchNotionUser = async (
+export const fetchNotionUsers = async (
   userIds: string[]
 ): Promise<{ id: string; full_name: string }[]> => {
   const users = await fetchNotionData({
@@ -83,11 +80,13 @@ export const fetchNotionUser = async (
       requests: userIds.map((id) => ({ id, table: "notion_user" })),
     },
   });
-
   return users.results.map((u: any) => {
     const user = {
       id: u.value.id,
-      full_name: u.value.given_name + " " + u.value.family_name,
+      firstName: u.value.given_name,
+      lastLame: u.value.family_name,
+      fullName: u.value.given_name + " " + u.value.family_name,
+      profilePhoto: u.value.profile_photo,
     };
     return user;
   });

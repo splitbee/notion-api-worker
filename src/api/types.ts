@@ -41,12 +41,15 @@ export type ColumnSchemaType = {
   type: ColumnType;
 };
 
+type UserType = { id: string; full_name: string };
+
 export type RowContentType =
   | string
   | boolean
   | number
   | string[]
-  | { title: string; id: string };
+  | { title: string; id: string }
+  | UserType[];
 
 export interface BaseValueType {
   id: string;

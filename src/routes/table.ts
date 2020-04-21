@@ -1,13 +1,15 @@
-import { fetchPageById, fetchTableData } from "../api/notion";
+import { Params } from "tiny-request-router";
+import { fetchPageById, fetchTableData, fetchNotionUsers } from "../api/notion";
 import { parsePageId, getNotionValue } from "../api/utils";
 import { RowContentType, CollectionType, RowType } from "../api/types";
 import { createResponse } from "../response";
 
-export async function tableRoute(params: { pageId: string }) {
+export async function tableRoute(params: Params) {
   const pageId = parsePageId(params.pageId);
   const page = await fetchPageById(pageId);
 
-  console.log({ page });
+  if (!page.recordMap.collection)
+    return new Response("No table found on Notion page: " + pageId);
 
   const collection: CollectionType = Object.keys(page.recordMap.collection).map(
     (k) => page.recordMap.collection[k]
@@ -23,8 +25,6 @@ export async function tableRoute(params: { pageId: string }) {
     collectionView.value.id
   );
 
-  console.log({ table });
-
   const collectionRows = collection.value.schema;
   const collectionColKeys = Object.keys(collectionRows);
 
@@ -37,17 +37,26 @@ export async function tableRoute(params: { pageId: string }) {
       b.value && b.value.properties && b.value.parent_id === collection.value.id
   );
 
-  const rows = tableData.map((td) => {
-    let row: { [key: string]: RowContentType } = { id: td.value.id };
-    collectionColKeys.forEach((key) => {
+  type Row = { id: string; [key: string]: RowContentType };
+
+  const rows: Row[] = [];
+
+  for (const td of tableData) {
+    let row: Row = { id: td.value.id };
+
+    for (const key of collectionColKeys) {
       const val = td.value.properties[key];
       if (val) {
         const schema = collectionRows[key];
         row[schema.name] = getNotionValue(val, schema.type);
+        if (schema.type === "person") {
+          const users = await fetchNotionUsers(row[schema.name] as string[]);
+          row[schema.name] = users;
+        }
       }
-    });
-    return row;
-  });
+    }
+    rows.push(row);
+  }
 
   return createResponse(JSON.stringify(rows));
 }
