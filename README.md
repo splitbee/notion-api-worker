@@ -1,10 +1,11 @@
 ![Notion API Worker](https://user-images.githubusercontent.com/1440854/79867270-634a1800-83de-11ea-98ad-42209b9f32a7.png)
 
-A **serverless wrapper** for the the private Notion API. It provides fast and easy access to your Notion content. Ideal if you want to use Notion as CMS.
+A **serverless wrapper** for the the private Notion API. It provides fast and easy access to your Notion content.
+Ideal to make Notion your CMS.
 
 It's powered by [Cloudflare Workers](https://workers.cloudflare.com/). 
 
-_This package might become obsolete, once the official Notion API arrives._
+_Use with caution. This is based on the private Notion API so we can not gurantee it will stay stable._
 
 ## Features
 
@@ -29,18 +30,20 @@ _This package might become obsolete, once the official Notion API arrives._
 
 We provide a hosted version of this project on [`https://notion-api.splitbee.io`](https://notion-api.splitbee.io/). You can also [host your own](https://workers.cloudflare.com/). Cloudflare offers a generous free plan with up to 100,000 request per day.
 
-### Load Page - `/v1/page/<PAGE_ID>`
+### Load page data
+`/v1/page/<PAGE_ID>`
 
-[Example](https://notion-api.splitbee.io/v1/page/2e22de6b770e4166be301490f6ffd420)
+Example [https://notion-api.splitbee.io/v1/page/2e22de6b770e4166be301490f6ffd420](https://notion-api.splitbee.io/v1/page/2e22de6b770e4166be301490f6ffd420)
 
 Returns all block data for a given page.
 For example, you can render this data with [`react-notion`](https://github.com/splitbee/react-notion).
 
-### Loage Table `/v1/table/<PAGE_ID>`
+### Load data from table
+`/v1/table/<PAGE_ID>`
 
-[Example](https://notion-api.splitbee.io/v1/page/2e22de6b770e4166be301490f6ffd420)
+ Example [https://notion-api.splitbee.io/v1/table/20720198ca7a4e1b92af0a007d3b45a4](https://notion-api.splitbee.io/v1/table/20720198ca7a4e1b92af0a007d3b45a4)
 
-Returns the given Table page as object array. The column names serve as key for those object.
+Returns the given table page as object array. The column names serve as keys for those objects. The `id` reprents the page ID of the underlying page.
 
 
 ## Credits
