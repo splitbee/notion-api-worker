@@ -1,7 +1,5 @@
 ![Notion API Worker](https://user-images.githubusercontent.com/1440854/79867270-634a1800-83de-11ea-98ad-42209b9f32a7.png)
 
-# notion-cloudflare-worker
-
 A **serverless wrapper** for the the private Notion API. It provides fast and easy access to your Notion content. Ideal if you want to use Notion as CMS.
 
 It's powered by [Cloudflare Workers](https://workers.cloudflare.com/). 
