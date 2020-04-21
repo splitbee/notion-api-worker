@@ -1,5 +1,5 @@
 {
-  "name": "notion-cloudflare-worker",
+  "name": "notion-api-worker",
   "version": "0.1.0",
   "main": "dist/index.js",
   "license": "MIT",
