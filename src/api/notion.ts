@@ -11,6 +11,7 @@ type JSONData =
 type INotionParams = {
   resource: string;
   body: JSONData;
+  notionToken?: string;
 };
 
 const loadPageChunkBody = {
@@ -20,11 +21,16 @@ const loadPageChunkBody = {
   verticalColumns: false,
 };
 
-const fetchNotionData = async ({ resource, body }: INotionParams) => {
+const fetchNotionData = async ({
+  resource,
+  body,
+  notionToken,
+}: INotionParams) => {
   const res = await fetch(`${NOTION_API}/${resource}`, {
     method: "POST",
     headers: {
       "content-type": "application/json",
+      ...(notionToken && { cookie: `token_v2=${notionToken}` }),
     },
     body: JSON.stringify(body),
   });
@@ -32,13 +38,14 @@ const fetchNotionData = async ({ resource, body }: INotionParams) => {
   return res.json();
 };
 
-export const fetchPageById = async (pageId: string) => {
+export const fetchPageById = async (pageId: string, notionToken?: string) => {
   const res = await fetchNotionData({
     resource: "loadPageChunk",
     body: {
       pageId,
       ...loadPageChunkBody,
     },
+    notionToken,
   });
 
   return res;
@@ -58,7 +65,8 @@ const queryCollectionBody = {
 
 export const fetchTableData = async (
   collectionId: string,
-  collectionViewId: string
+  collectionViewId: string,
+  notionToken?: string
 ) => {
   const table = await fetchNotionData({
     resource: "queryCollection",
@@ -67,18 +75,21 @@ export const fetchTableData = async (
       collectionViewId,
       ...queryCollectionBody,
     },
+    notionToken,
   });
   return table;
 };
 
 export const fetchNotionUsers = async (
-  userIds: string[]
+  userIds: string[],
+  notionToken?: string
 ): Promise<{ id: string; full_name: string }[]> => {
   const users = await fetchNotionData({
     resource: "getRecordValues",
     body: {
       requests: userIds.map((id) => ({ id, table: "notion_user" })),
     },
+    notionToken,
   });
   return users.results.map((u: any) => {
     const user = {
