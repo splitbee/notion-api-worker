@@ -28,3 +28,7 @@ export interface Caches {
 }
 
 declare let caches: Caches;
+
+declare global {
+  const NOTION_TOKEN: string | undefined;
+}

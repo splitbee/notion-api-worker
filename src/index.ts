@@ -6,7 +6,10 @@ import { tableRoute } from "./routes/table";
 import { userRoute } from "./routes/user";
 import { createResponse } from "./response";
 
-export type Handler = (params: Params) => Promise<Response> | Response;
+export type Handler = (
+  params: Params,
+  notionToken?: string
+) => Promise<Response> | Response;
 
 const router = new Router<Handler>();
 
@@ -27,10 +30,16 @@ router.get("*", async () =>
 );
 
 const cache = (caches as any).default;
+const NOTION_API_TOKEN =
+  typeof NOTION_TOKEN !== "undefined" ? NOTION_TOKEN : undefined;
 
 const handleRequest = async (fetchEvent: FetchEvent): Promise<Response> => {
   const request = fetchEvent.request;
   const { pathname } = new URL(request.url);
+  const notionToken =
+    NOTION_API_TOKEN ||
+    (request.headers.get("Authorization") || "").split("Bearer ")[1] ||
+    undefined;
 
   const match = router.match(request.method as Method, pathname);
 
@@ -48,7 +57,7 @@ const handleRequest = async (fetchEvent: FetchEvent): Promise<Response> => {
   } catch (err) {}
 
   const getResponseAndPersist = async () => {
-    const res = await match.handler(match.params);
+    const res = await match.handler(match.params, notionToken);
 
     await cache.put(cacheKey, res.clone());
     return res;

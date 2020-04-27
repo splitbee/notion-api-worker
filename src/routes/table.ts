@@ -4,9 +4,9 @@ import { parsePageId, getNotionValue } from "../api/utils";
 import { RowContentType, CollectionType, RowType } from "../api/types";
 import { createResponse } from "../response";
 
-export async function tableRoute(params: Params) {
+export async function tableRoute(params: Params, notionToken?: string) {
   const pageId = parsePageId(params.pageId);
-  const page = await fetchPageById(pageId);
+  const page = await fetchPageById(pageId, notionToken);
 
   if (!page.recordMap.collection)
     return createResponse(
@@ -26,7 +26,8 @@ export async function tableRoute(params: Params) {
 
   const table = await fetchTableData(
     collection.value.id,
-    collectionView.value.id
+    collectionView.value.id,
+    notionToken
   );
 
   const collectionRows = collection.value.schema;
