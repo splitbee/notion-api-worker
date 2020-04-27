@@ -47,16 +47,16 @@ Example ([Source Notion Page](https://www.notion.so/splitbee/20720198ca7a4e1b92a
 
 ## Authentication for private pages
 
-You can access all public pages per default. If you want to fetch private pages there are two options.
+All public pages can be accessed without authorization. If you want to fetch private pages there are two options.
 
-- The recommended way is to host your own version of the worker. Set the `NOTION_TOKEN` as environment variable as described [here](https://developers.cloudflare.com/workers/reference/apis/environment-variables/)
-- The second way would be to add the header `notion_token` to each request.
+- The recommended way is to host your own worker with the `NOTION_TOKEN` environment variable set. You can find more information in the [Cloudflare Workers documentation](https://developers.cloudflare.com/workers/reference/apis/environment-variables/).
+- Alternatively you can set the `notion_token` header to authorize your requests.
 
 ### Receiving the token
 
-Get the `token_v2` cookie from Notion with the browser DevTools while you are logged in.
+To obtain your token, login to Notion and open your DevTools and find your cookies. There should be a cookie called `token_v2`, which is used for the authorization.
 
 ## Credits
 
-- [Timo Lins](https://timo.sh) – Idea, Documentation
-- [Tobias Lins](https://tobi.sh) – Code
+- [Timo Lins](https://twitter.com/timolins) – Idea, Documentation
+- [Tobias Lins](https://twitter.com/linstobias) – Code
