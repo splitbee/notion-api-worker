@@ -45,12 +45,16 @@ Example ([Source Notion Page](https://www.notion.so/splitbee/20720198ca7a4e1b92a
 
 [`https://notion-api.splitbee.io/v1/table/20720198ca7a4e1b92af0a007d3b45a4`](https://notion-api.splitbee.io/v1/table/20720198ca7a4e1b92af0a007d3b45a4)
 
-### Private Notion Data
+## Authentication for private pages
 
-We highly recommend to host the Worker on your own Cloudflare account if you want to query private Notion pages. You can receive the token by getting the `token_v2` cookie from Notion.
+You can access all public pages per default. If you want to fetch private pages there are two options.
 
-- Define `NOTION_TOKEN` as environment variable as described [here](https://developers.cloudflare.com/workers/reference/apis/environment-variables/)
-- Add the header `notion_token` to each request
+- The recommended way is to host your own version of the worker. Set the `NOTION_TOKEN` as environment variable as described [here](https://developers.cloudflare.com/workers/reference/apis/environment-variables/)
+- The second way would be to add the header `notion_token` to each request.
+
+### Receiving the token
+
+Get the `token_v2` cookie from Notion with the browser DevTools while you are logged in.
 
 ## Credits
 
