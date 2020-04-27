@@ -37,7 +37,9 @@ const handleRequest = async (fetchEvent: FetchEvent): Promise<Response> => {
   const request = fetchEvent.request;
   const { pathname } = new URL(request.url);
   const notionToken =
-    NOTION_API_TOKEN || request.headers.get("notion-token") || undefined;
+    NOTION_API_TOKEN ||
+    (request.headers.get("Authorization") || "").split("Bearer ")[1] ||
+    undefined;
 
   const match = router.match(request.method as Method, pathname);
 

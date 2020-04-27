@@ -50,7 +50,7 @@ Example ([Source Notion Page](https://www.notion.so/splitbee/20720198ca7a4e1b92a
 All public pages can be accessed without authorization. If you want to fetch private pages there are two options.
 
 - The recommended way is to host your own worker with the `NOTION_TOKEN` environment variable set. You can find more information in the [Cloudflare Workers documentation](https://developers.cloudflare.com/workers/reference/apis/environment-variables/).
-- Alternatively you can set the `notion_token` header to authorize your requests.
+- Alternatively you can set the `Authorization: Bearer <NOTION_TOKEN>` header to authorize your requests.
 
 ### Receiving the token
 
