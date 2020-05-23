@@ -1,9 +1,11 @@
+import { JSONData } from "./api/types";
+
 export const createResponse = (
-  body: string,
+  body: JSONData,
   headers?: { [key: string]: string },
   statusCode?: number
 ) => {
-  return new Response(body, {
+  return new Response(JSON.stringify(body), {
     status: statusCode || 200,
     headers: {
       "Access-Control-Allow-Origin": "*",

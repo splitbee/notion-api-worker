@@ -7,5 +7,5 @@ export async function pageRoute(params: Params, notionToken?: string) {
   const pageId = parsePageId(params.pageId);
   const res = await fetchPageById(pageId, notionToken);
 
-  return createResponse(JSON.stringify(res.recordMap.block));
+  return createResponse(res.recordMap.block);
 }

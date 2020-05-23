@@ -5,5 +5,5 @@ import { createResponse } from "../response";
 export async function userRoute(params: Params, notionToken?: string) {
   const users = await fetchNotionUsers([params.userId], notionToken);
 
-  return createResponse(JSON.stringify(users[0]));
+  return createResponse(users[0]);
 }

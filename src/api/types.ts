@@ -87,3 +87,11 @@ export interface RowType {
     properties: { [key: string]: DecorationType[] };
   };
 }
+
+export type JSONData =
+  | null
+  | boolean
+  | number
+  | string
+  | JSONData[]
+  | { [prop: string]: JSONData };

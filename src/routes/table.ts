@@ -16,12 +16,12 @@ export async function tableRoute(params: Params, notionToken?: string) {
     );
 
   const collection: CollectionType = Object.keys(page.recordMap.collection).map(
-    (k) => page.recordMap.collection[k]
+    k => page.recordMap.collection[k]
   )[0];
   const collectionView: {
     value: { id: CollectionType["value"]["id"] };
   } = Object.keys(page.recordMap.collection_view).map(
-    (k) => page.recordMap.collection_view[k]
+    k => page.recordMap.collection_view[k]
   )[0];
 
   const table = await fetchTableData(
@@ -38,7 +38,7 @@ export async function tableRoute(params: Params, notionToken?: string) {
   );
 
   const tableData = tableArr.filter(
-    (b) =>
+    b =>
       b.value && b.value.properties && b.value.parent_id === collection.value.id
   );
 
@@ -63,5 +63,5 @@ export async function tableRoute(params: Params, notionToken?: string) {
     rows.push(row);
   }
 
-  return createResponse(JSON.stringify(rows));
+  return createResponse(rows);
 }

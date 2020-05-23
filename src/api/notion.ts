@@ -1,18 +1,12 @@
+import { JSONData } from "./types";
+
 const NOTION_API = "https://www.notion.so/api/v3";
 
-type JSONData =
-  | null
-  | boolean
-  | number
-  | string
-  | JSONData[]
-  | { [prop: string]: JSONData };
-
-type INotionParams = {
+interface INotionParams {
   resource: string;
   body: JSONData;
   notionToken?: string;
-};
+}
 
 const loadPageChunkBody = {
   limit: 999,
