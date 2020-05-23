@@ -20,10 +20,10 @@ router.get("/v1/user/:userId", userRoute);
 
 router.get("*", async () =>
   createResponse(
-    JSON.stringify({
+    {
       error: `Route not found!`,
       routes: ["/v1/page/:pageId", "/v1/table/:pageId", " /v1/user/:pageId"],
-    }),
+    },
     {},
     404
   )

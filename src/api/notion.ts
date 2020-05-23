@@ -15,11 +15,11 @@ const loadPageChunkBody = {
   verticalColumns: false,
 };
 
-const fetchNotionData = async ({
+const fetchNotionData = async <T extends any>({
   resource,
   body,
   notionToken,
-}: INotionParams) => {
+}: INotionParams): Promise<T> => {
   const res = await fetch(`${NOTION_API}/${resource}`, {
     method: "POST",
     headers: {
@@ -81,7 +81,7 @@ export const fetchNotionUsers = async (
   const users = await fetchNotionData({
     resource: "getRecordValues",
     body: {
-      requests: userIds.map((id) => ({ id, table: "notion_user" })),
+      requests: userIds.map(id => ({ id, table: "notion_user" })),
     },
     notionToken,
   });
@@ -94,5 +94,23 @@ export const fetchNotionUsers = async (
       profilePhoto: u.value.profile_photo,
     };
     return user;
+  });
+};
+
+export const fetchBlocks = async (
+  blockList: string[],
+  notionToken?: string
+) => {
+  return await fetchNotionData({
+    resource: "syncRecordValues",
+    body: {
+      recordVersionMap: {
+        block: blockList.reduce((obj, blockId) => {
+          obj[blockId] = -1;
+          return obj;
+        }, {} as { [key: string]: -1 }),
+      },
+    },
+    notionToken,
   });
 };
