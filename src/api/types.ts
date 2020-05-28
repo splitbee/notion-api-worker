@@ -34,7 +34,8 @@ export type ColumnType =
   | "checkbox"
   | "title"
   | "multi_select"
-  | "number";
+  | "number"
+  | "relation";
 
 export type ColumnSchemaType = {
   name: string;
