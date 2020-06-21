@@ -54,6 +54,7 @@ export type RowContentType =
 
 export interface BaseValueType {
   id: string;
+  type: string;
   version: number;
   created_time: number;
   last_edited_time: number;
@@ -96,3 +97,52 @@ export type JSONData =
   | string
   | JSONData[]
   | { [prop: string]: JSONData };
+
+export type BlockMapType = {
+  [key: string]: BlockType;
+};
+
+export interface NotionUserType {
+  role: string;
+  value: {
+    id: string;
+    version: number;
+    email: string;
+    given_name: string;
+    family_name: string;
+    profile_photo: string;
+    onboarding_completed: boolean;
+    mobile_onboarding_completed: boolean;
+  };
+}
+export interface BlockType {
+  role: string;
+  value: BaseValueType;
+}
+
+export interface RecordMapType {
+  block: BlockMapType;
+  notion_user: {
+    [key: string]: NotionUserType;
+  };
+  collection: {
+    [key: string]: CollectionType;
+  };
+  collection_view: any;
+}
+
+export interface LoadPageChunkData {
+  recordMap: RecordMapType;
+  cursor: {
+    stack: any[];
+  };
+}
+
+export interface CollectionData {
+  recordMap: {
+    block: { [key: string]: RowType };
+  };
+  result: {
+    blockIds: string[];
+  };
+}

@@ -1,7 +1,7 @@
 import { JSONData } from "./api/types";
 
 export const createResponse = (
-  body: JSONData,
+  body: JSONData | any,
   headers?: { [key: string]: string },
   statusCode?: number
 ) => {

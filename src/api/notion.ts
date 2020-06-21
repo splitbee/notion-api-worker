@@ -1,4 +1,10 @@
-import { JSONData } from "./types";
+import {
+  JSONData,
+  BlockMapType,
+  NotionUserType,
+  LoadPageChunkData,
+  CollectionData,
+} from "./types";
 
 const NOTION_API = "https://www.notion.so/api/v3";
 
@@ -33,7 +39,7 @@ const fetchNotionData = async <T extends any>({
 };
 
 export const fetchPageById = async (pageId: string, notionToken?: string) => {
-  const res = await fetchNotionData({
+  const res = await fetchNotionData<LoadPageChunkData>({
     resource: "loadPageChunk",
     body: {
       pageId,
@@ -62,7 +68,7 @@ export const fetchTableData = async (
   collectionViewId: string,
   notionToken?: string
 ) => {
-  const table = await fetchNotionData({
+  const table = await fetchNotionData<CollectionData>({
     resource: "queryCollection",
     body: {
       collectionId,
@@ -77,15 +83,15 @@ export const fetchTableData = async (
 export const fetchNotionUsers = async (
   userIds: string[],
   notionToken?: string
-): Promise<{ id: string; full_name: string }[]> => {
-  const users = await fetchNotionData({
+) => {
+  const users = await fetchNotionData<{ results: NotionUserType[] }>({
     resource: "getRecordValues",
     body: {
-      requests: userIds.map(id => ({ id, table: "notion_user" })),
+      requests: userIds.map((id) => ({ id, table: "notion_user" })),
     },
     notionToken,
   });
-  return users.results.map((u: any) => {
+  return users.results.map((u) => {
     const user = {
       id: u.value.id,
       firstName: u.value.given_name,
@@ -101,7 +107,7 @@ export const fetchBlocks = async (
   blockList: string[],
   notionToken?: string
 ) => {
-  return await fetchNotionData({
+  return await fetchNotionData<LoadPageChunkData>({
     resource: "syncRecordValues",
     body: {
       recordVersionMap: {
