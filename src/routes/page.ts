@@ -3,11 +3,11 @@ import { fetchPageById, fetchBlocks } from "../api/notion";
 import { parsePageId } from "../api/utils";
 import { createResponse } from "../response";
 import { getTableData } from "./table";
-import { CollectionType, BlockType } from "../api/types";
+import { CollectionType, BlockType, HandlerRequest } from "../api/types";
 
-export async function pageRoute(params: Params, notionToken?: string) {
-  const pageId = parsePageId(params.pageId);
-  const page = await fetchPageById(pageId, notionToken);
+export async function pageRoute(req: HandlerRequest) {
+  const pageId = parsePageId(req.params.pageId);
+  const page = await fetchPageById(pageId, req.notionToken);
 
   const baseBlocks = page.recordMap.block;
 
@@ -60,7 +60,7 @@ export async function pageRoute(params: Params, notionToken?: string) {
       const data = await getTableData(
         collection,
         collectionView.value.id,
-        notionToken
+        req.notionToken
       );
 
       allBlocks[b] = {
