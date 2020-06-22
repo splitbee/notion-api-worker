@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack",
-    "dev": "wrangler preview --watch",
+    "dev": "wrangler dev",
+    "preview": "wrangler preview",
     "deploy": "wrangler publish -e production"
   },
   "dependencies": {
@@ -13,9 +14,12 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^1.0.9",
+    "@cloudflare/wrangler": "^1.10.1",
     "@types/node": "^13.13.1",
     "prettier": "^2.0.4",
     "ts-loader": "^7.0.1",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12"
   }
 }
