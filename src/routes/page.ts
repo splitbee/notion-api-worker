@@ -10,49 +10,55 @@ export async function pageRoute(params: Params, notionToken?: string) {
   const page = await fetchPageById(pageId, notionToken);
 
   const baseBlocks = page.recordMap.block;
+  const baseBlockKeys = Object.keys(baseBlocks);
 
-  const pendingBlocks = Object.keys(baseBlocks).flatMap((blockId) => {
+  const pendingBlocks = baseBlockKeys.flatMap((blockId) => {
     const block = baseBlocks[blockId];
-    const contents = block.value.content;
+    const content = block.value.content;
 
-    return contents ? contents.filter((id: string) => !baseBlocks[id]) : [];
+    return content ? content.filter((id: string) => !baseBlocks[id]) : [];
   });
 
   const additionalBlocks = await fetchBlocks(pendingBlocks).then(
     (res) => res.recordMap.block
   );
 
-  let pendingCollections = Object.keys(baseBlocks).flatMap((blockId) => {
-    const block = baseBlocks[blockId];
-
-    return block.value.type === "collection_view" ? [block.value.id] : [];
-  });
-
-  let allBlocks: { [id: string]: BlockType & { data?: any } } = {
+  const allBlocks: { [id: string]: BlockType & { data?: any } } = {
     ...baseBlocks,
-    ...additionalBlocks,
+    ...additionalBlocks
   };
 
-  const collection = Object.keys(page.recordMap.collection).map(
-    (k) => page.recordMap.collection[k]
-  )[0];
+  const collection = page.recordMap.collection
+    ? page.recordMap.collection[Object.keys(page.recordMap.collection)[0]]
+    : null;
 
   const collectionView: {
     value: { id: CollectionType["value"]["id"] };
-  } = Object.keys(page.recordMap.collection_view).map(
-    (k) => page.recordMap.collection_view[k]
-  )[0];
+  } = page.recordMap.collection_view
+    ? page.recordMap.collection_view[
+        Object.keys(page.recordMap.collection_view)[0]
+      ]
+    : null;
 
-  for (let b of pendingCollections) {
-    const data = await getTableData(
-      collection,
-      collectionView.value.id,
-      notionToken
-    );
-    allBlocks[b] = {
-      ...allBlocks[b],
-      data,
-    };
+  if (collection && collectionView) {
+    const pendingCollections = baseBlockKeys.flatMap((blockId) => {
+      const block = baseBlocks[blockId];
+
+      return block.value.type === "collection_view" ? [block.value.id] : [];
+    });
+
+    for (let b of pendingCollections) {
+      const data = await getTableData(
+        collection,
+        collectionView.value.id,
+        notionToken
+      );
+
+      allBlocks[b] = {
+        ...allBlocks[b],
+        data
+      };
+    }
   }
 
   return createResponse(allBlocks);
