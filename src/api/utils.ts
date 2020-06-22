@@ -7,8 +7,10 @@ export const idToUuid = (path: string) =>
   )}-${path.substr(16, 4)}-${path.substr(20)}`;
 
 export const parsePageId = (id: string) => {
-  const rawId = id.replace(/\-/g, "").slice(-32);
-  return idToUuid(rawId);
+  if (id) {
+    const rawId = id.replace(/\-/g, "").slice(-32);
+    return idToUuid(rawId);
+  }
 };
 
 export const getNotionValue = (
@@ -20,7 +22,7 @@ export const getNotionValue = (
       return getTextContent(val);
     case "person":
       return (
-        val.filter(v => v.length > 1).map(v => v[1]![0][1] as string) || []
+        val.filter((v) => v.length > 1).map((v) => v[1]![0][1] as string) || []
       );
     case "checkbox":
       return val[0][0] === "Yes";
