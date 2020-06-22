@@ -10,23 +10,32 @@ export async function pageRoute(params: Params, notionToken?: string) {
   const page = await fetchPageById(pageId, notionToken);
 
   const baseBlocks = page.recordMap.block;
-  const baseBlockKeys = Object.keys(baseBlocks);
 
-  const pendingBlocks = baseBlockKeys.flatMap((blockId) => {
-    const block = baseBlocks[blockId];
-    const content = block.value.content;
-
-    return content ? content.filter((id: string) => !baseBlocks[id]) : [];
-  });
-
-  const additionalBlocks = await fetchBlocks(pendingBlocks).then(
-    (res) => res.recordMap.block
-  );
-
-  const allBlocks: { [id: string]: BlockType & { data?: any } } = {
+  let allBlocks: { [id: string]: BlockType & { data?: any } } = {
     ...baseBlocks,
-    ...additionalBlocks
   };
+  let allBlockKeys;
+
+  while (true) {
+    allBlockKeys = Object.keys(allBlocks);
+
+    const pendingBlocks = allBlockKeys.flatMap((blockId) => {
+      const block = allBlocks[blockId];
+      const content = block.value.content;
+
+      return content ? content.filter((id: string) => !allBlocks[id]) : [];
+    });
+
+    if (!pendingBlocks.length) {
+      break;
+    }
+
+    const newBlocks = await fetchBlocks(pendingBlocks).then(
+      (res) => res.recordMap.block
+    );
+
+    allBlocks = { ...allBlocks, ...newBlocks };
+  }
 
   const collection = page.recordMap.collection
     ? page.recordMap.collection[Object.keys(page.recordMap.collection)[0]]
@@ -41,8 +50,8 @@ export async function pageRoute(params: Params, notionToken?: string) {
     : null;
 
   if (collection && collectionView) {
-    const pendingCollections = baseBlockKeys.flatMap((blockId) => {
-      const block = baseBlocks[blockId];
+    const pendingCollections = allBlockKeys.flatMap((blockId) => {
+      const block = allBlocks[blockId];
 
       return block.value.type === "collection_view" ? [block.value.id] : [];
     });
@@ -56,7 +65,7 @@ export async function pageRoute(params: Params, notionToken?: string) {
 
       allBlocks[b] = {
         ...allBlocks[b],
-        data
+        data,
       };
     }
   }

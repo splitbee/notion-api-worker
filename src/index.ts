@@ -11,9 +11,15 @@ export type Handler = (
   notionToken?: string
 ) => Promise<Response> | Response;
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "*",
+  "Access-Control-Allow-Methods": "GET, HEAD, POST, OPTIONS",
+};
+
 const router = new Router<Handler>();
 
-router.options("*", () => new Response("", { headers: {} }));
+router.options("*", () => new Response(null, { headers: corsHeaders }));
 router.get("/v1/page/:pageId", pageRoute);
 router.get("/v1/table/:pageId", tableRoute);
 router.get("/v1/user/:userId", userRoute);
