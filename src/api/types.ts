@@ -1,3 +1,5 @@
+import { Params } from "tiny-request-router";
+
 type BoldFormatType = ["b"];
 type ItalicFormatType = ["i"];
 type StrikeFormatType = ["s"];
@@ -145,4 +147,41 @@ export interface CollectionData {
   result: {
     blockIds: string[];
   };
+}
+
+export interface NotionSearchParamsType {
+  ancestorId: string;
+  query: string;
+  filters?: {
+    isDeletedOnly: boolean;
+    excludeTemplates: boolean;
+    isNavigableOnly: boolean;
+    requireEditPermissions: boolean;
+  };
+  limit?: number;
+}
+
+export interface NotionSearchResultType {
+  id: string;
+  isNavigable: boolean;
+  score: number;
+  highlight: {
+    pathText: string;
+    text: string;
+  };
+}
+
+export interface NotionSearchResultsType {
+  recordMap: {
+    block: { [key: string]: RowType };
+  };
+  results: NotionSearchResultType[];
+  total: number;
+}
+
+export interface HandlerRequest = {
+  params: Params;
+  searchParams: URLSearchParams;
+  request: Request;
+  notionToken?: string;
 }

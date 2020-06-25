@@ -1,7 +1,12 @@
 import { Params } from "tiny-request-router";
 import { fetchPageById, fetchTableData, fetchNotionUsers } from "../api/notion";
 import { parsePageId, getNotionValue } from "../api/utils";
-import { RowContentType, CollectionType, RowType } from "../api/types";
+import {
+  RowContentType,
+  CollectionType,
+  RowType,
+  HandlerRequest,
+} from "../api/types";
 import { createResponse } from "../response";
 
 export const getTableData = async (
@@ -51,9 +56,9 @@ export const getTableData = async (
   return rows;
 };
 
-export async function tableRoute(params: Params, notionToken?: string) {
-  const pageId = parsePageId(params.pageId);
-  const page = await fetchPageById(pageId, notionToken);
+export async function tableRoute(req: HandlerRequest) {
+  const pageId = parsePageId(req.params.pageId);
+  const page = await fetchPageById(pageId, req.notionToken);
 
   if (!page.recordMap.collection)
     return createResponse(
@@ -75,7 +80,7 @@ export async function tableRoute(params: Params, notionToken?: string) {
   const rows = await getTableData(
     collection,
     collectionView.value.id,
-    notionToken
+    req.notionToken
   );
 
   return createResponse(rows);
