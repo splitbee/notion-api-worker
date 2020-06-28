@@ -4,6 +4,8 @@ import {
   NotionUserType,
   LoadPageChunkData,
   CollectionData,
+  NotionSearchParamsType,
+  NotionSearchResultsType,
 } from "./types";
 
 const NOTION_API = "https://www.notion.so/api/v3";
@@ -116,6 +118,37 @@ export const fetchBlocks = async (
           return obj;
         }, {} as { [key: string]: -1 }),
       },
+    },
+    notionToken,
+  });
+};
+
+export const fetchNotionSearch = async (
+  params: NotionSearchParamsType,
+  notionToken?: string
+) => {
+  // TODO: support other types of searches
+  return fetchNotionData<{ results: NotionSearchResultsType }>({
+    resource: "search",
+    body: {
+      type: "BlocksInAncestor",
+      source: "quick_find_public",
+      ancestorId: params.ancestorId,
+      filters: {
+        isDeletedOnly: false,
+        excludeTemplates: true,
+        isNavigableOnly: true,
+        requireEditPermissions: false,
+        ancestors: [],
+        createdBy: [],
+        editedBy: [],
+        lastEditedTime: {},
+        createdTime: {},
+        ...params.filters,
+      },
+      sort: "Relevance",
+      limit: params.limit || 20,
+      query: params.query,
     },
     notionToken,
   });
