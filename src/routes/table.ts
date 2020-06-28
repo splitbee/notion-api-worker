@@ -11,7 +11,8 @@ import { createResponse } from "../response";
 export const getTableData = async (
   collection: CollectionType,
   collectionViewId: string,
-  notionToken?: string
+  notionToken?: string,
+  raw?: boolean
 ) => {
   const table = await fetchTableData(
     collection.value.id,
@@ -42,7 +43,7 @@ export const getTableData = async (
       const val = td.value.properties[key];
       if (val) {
         const schema = collectionRows[key];
-        row[schema.name] = getNotionValue(val, schema.type);
+        row[schema.name] = raw ? val : getNotionValue(val, schema.type);
         if (schema.type === "person") {
           const users = await fetchNotionUsers(row[schema.name] as string[]);
           row[schema.name] = users as any;
@@ -52,7 +53,7 @@ export const getTableData = async (
     rows.push(row);
   }
 
-  return rows;
+  return { rows };
 };
 
 export async function tableRoute(req: HandlerRequest) {
@@ -76,7 +77,7 @@ export async function tableRoute(req: HandlerRequest) {
     (k) => page.recordMap.collection_view[k]
   )[0];
 
-  const rows = await getTableData(
+  const { rows } = await getTableData(
     collection,
     collectionView.value.id,
     req.notionToken

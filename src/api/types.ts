@@ -52,7 +52,8 @@ export type RowContentType =
   | number
   | string[]
   | { title: string; id: string }
-  | UserType[];
+  | UserType[]
+  | DecorationType[];
 
 export interface BaseValueType {
   id: string;
@@ -130,7 +131,14 @@ export interface RecordMapType {
   collection: {
     [key: string]: CollectionType;
   };
-  collection_view: any;
+  collection_view: {
+    [key: string]: {
+      value: {
+        id: string;
+        type: CollectionViewType;
+      };
+    };
+  };
 }
 
 export interface LoadPageChunkData {
@@ -140,9 +148,16 @@ export interface LoadPageChunkData {
   };
 }
 
+type CollectionViewType = "table" | "gallery";
+
 export interface CollectionData {
   recordMap: {
     block: { [key: string]: RowType };
+    collection_view: {
+      [key: string]: {
+        value: { type: CollectionViewType };
+      };
+    };
   };
   result: {
     blockIds: string[];
