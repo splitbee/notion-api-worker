@@ -10,7 +10,7 @@ export async function pageRoute(req: HandlerRequest) {
 
   const baseBlocks = page.recordMap.block;
 
-  let allBlocks: { [id: string]: BlockType & { data?: any } } = {
+  let allBlocks: { [id: string]: BlockType & { table?: any } } = {
     ...baseBlocks,
   };
   let allBlockKeys;
@@ -64,7 +64,10 @@ export async function pageRoute(req: HandlerRequest) {
 
       allBlocks[b] = {
         ...allBlocks[b],
-        data,
+        table: {
+          title: collection.value.name,
+          data,
+        },
       };
     }
   }
