@@ -1,4 +1,3 @@
-import { Params } from "tiny-request-router";
 import { fetchNotionUsers } from "../api/notion";
 import { HandlerRequest } from "../api/types";
 import { createResponse } from "../response";

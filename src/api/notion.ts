@@ -1,6 +1,5 @@
 import {
   JSONData,
-  BlockMapType,
   NotionUserType,
   LoadPageChunkData,
   CollectionData,

@@ -4,9 +4,9 @@ import { HandlerRequest } from "../api/types";
 import { parsePageId } from "../api/utils";
 
 export async function searchRoute(req: HandlerRequest) {
-  const ancestorId = parsePageId(req.searchParams.get("ancestorId"));
+  const ancestorId = parsePageId(req.searchParams.get("ancestorId") || "");
   const query = req.searchParams.get("query") || "";
-  const limit = req.searchParams.get("limit") || 20;
+  const limit = Number(req.searchParams.get("limit") || 20);
 
   if (!ancestorId) {
     return createResponse(

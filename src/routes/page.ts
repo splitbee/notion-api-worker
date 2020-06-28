@@ -1,4 +1,3 @@
-import { Params } from "tiny-request-router";
 import { fetchPageById, fetchBlocks } from "../api/notion";
 import { parsePageId } from "../api/utils";
 import { createResponse } from "../response";
@@ -7,7 +6,7 @@ import { CollectionType, BlockType, HandlerRequest } from "../api/types";
 
 export async function pageRoute(req: HandlerRequest) {
   const pageId = parsePageId(req.params.pageId);
-  const page = await fetchPageById(pageId, req.notionToken);
+  const page = await fetchPageById(pageId!, req.notionToken);
 
   const baseBlocks = page.recordMap.block;
 

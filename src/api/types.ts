@@ -179,7 +179,7 @@ export interface NotionSearchResultsType {
   total: number;
 }
 
-export interface HandlerRequest = {
+export interface HandlerRequest {
   params: Params;
   searchParams: URLSearchParams;
   request: Request;

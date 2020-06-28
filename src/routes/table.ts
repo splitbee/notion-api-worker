@@ -1,4 +1,3 @@
-import { Params } from "tiny-request-router";
 import { fetchPageById, fetchTableData, fetchNotionUsers } from "../api/notion";
 import { parsePageId, getNotionValue } from "../api/utils";
 import {
@@ -58,7 +57,7 @@ export const getTableData = async (
 
 export async function tableRoute(req: HandlerRequest) {
   const pageId = parsePageId(req.params.pageId);
-  const page = await fetchPageById(pageId, req.notionToken);
+  const page = await fetchPageById(pageId!, req.notionToken);
 
   if (!page.recordMap.collection)
     return createResponse(
