@@ -22,7 +22,7 @@ router.get("*", async () =>
   createResponse(
     {
       error: `Route not found!`,
-      routes: ["/v1/page/:pageId", "/v1/table/:pageId", " /v1/user/:pageId"],
+      routes: ["/v1/page/:pageId", "/v1/table/:pageId", "/v1/user/:pageId"],
     },
     {},
     404
