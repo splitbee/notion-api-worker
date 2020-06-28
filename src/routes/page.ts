@@ -54,7 +54,7 @@ export async function pageRoute(req: HandlerRequest) {
     });
 
     for (let b of pendingCollections) {
-      const { rows } = await getTableData(
+      const { rows, schema } = await getTableData(
         collection,
         collectionView.value.id,
         req.notionToken,
@@ -67,11 +67,11 @@ export async function pageRoute(req: HandlerRequest) {
         ...allBlocks[b],
         collection: {
           title: collection.value.name,
-          type: viewIds.map((id) =>
-            page.recordMap.collection_view[id]
-              ? page.recordMap.collection_view[id].value.type
-              : undefined
-          ),
+          schema,
+          types: viewIds.map((id) => {
+            const col = page.recordMap.collection_view[id];
+            return col ? col.value : undefined;
+          }),
           data: rows,
         },
       };

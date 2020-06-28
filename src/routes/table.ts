@@ -53,7 +53,7 @@ export const getTableData = async (
     rows.push(row);
   }
 
-  return { rows };
+  return { rows, schema: collectionRows };
 };
 
 export async function tableRoute(req: HandlerRequest) {
