@@ -22,7 +22,9 @@ export async function pageRoute(req: HandlerRequest) {
       const block = allBlocks[blockId];
       const content = block.value.content;
 
-      return content ? content.filter((id: string) => !allBlocks[id]) : [];
+      return content && block.value.type !== "page"
+        ? content.filter((id: string) => !allBlocks[id])
+        : [];
     });
 
     if (!pendingBlocks.length) {

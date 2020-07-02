@@ -92,16 +92,19 @@ export const fetchNotionUsers = async (
     },
     notionToken,
   });
-  return users.results.map((u) => {
-    const user = {
-      id: u.value.id,
-      firstName: u.value.given_name,
-      lastLame: u.value.family_name,
-      fullName: u.value.given_name + " " + u.value.family_name,
-      profilePhoto: u.value.profile_photo,
-    };
-    return user;
-  });
+  if (users && users.results) {
+    return users.results.map((u) => {
+      const user = {
+        id: u.value.id,
+        firstName: u.value.given_name,
+        lastLame: u.value.family_name,
+        fullName: u.value.given_name + " " + u.value.family_name,
+        profilePhoto: u.value.profile_photo,
+      };
+      return user;
+    });
+  }
+  return [];
 };
 
 export const fetchBlocks = async (
