@@ -41,6 +41,8 @@ export const getNotionValue = (
       return val
         .filter(([symbol]) => symbol === "‣")
         .map(([_, relation]) => relation![0][1] as string);
+    case "url":
+      return val[0][0];
     default:
       console.log({ val, type });
       return "Not supported";

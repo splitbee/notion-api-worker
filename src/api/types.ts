@@ -37,6 +37,7 @@ export type ColumnType =
   | "title"
   | "multi_select"
   | "number"
+  | "url"
   | "relation";
 
 export type ColumnSchemaType = {
