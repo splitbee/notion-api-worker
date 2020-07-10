@@ -38,6 +38,7 @@ export type ColumnType =
   | "multi_select"
   | "number"
   | "url"
+  | "file"
   | "relation";
 
 export type ColumnSchemaType = {

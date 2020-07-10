@@ -43,6 +43,18 @@ export const getNotionValue = (
         .map(([_, relation]) => relation![0][1] as string);
     case "url":
       return val[0][0];
+    case "file":
+      // File values are a complex nested array, but this structure
+      // contains links of the form ["a", URL]. We flatten the structure,
+      // and pick up the elements following "a".
+      const urls: string[] = [];
+      const values = val.flat(Number.MAX_SAFE_INTEGER);
+      values.forEach((value, i) => {
+        if (value === "a" && typeof values[i + 1] === "string") {
+          urls.push(values[i + 1] as string);
+        }
+      });
+      return urls;
     default:
       console.log({ val, type });
       return "Not supported";
