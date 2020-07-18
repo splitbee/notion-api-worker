@@ -41,6 +41,10 @@ export const getNotionValue = (
       return val
         .filter(([symbol]) => symbol === "‣")
         .map(([_, relation]) => relation![0][1] as string);
+    case "file":
+      return val
+        .filter((v) => v.length > 1)
+        .map((v) => ({ name: v[0] as string, url: v[1]![0][1] as string }));
     default:
       console.log({ val, type });
       return "Not supported";

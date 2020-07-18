@@ -37,7 +37,8 @@ export type ColumnType =
   | "title"
   | "multi_select"
   | "number"
-  | "relation";
+  | "relation"
+  | "file";
 
 export type ColumnSchemaType = {
   name: string;
@@ -53,7 +54,8 @@ export type RowContentType =
   | string[]
   | { title: string; id: string }
   | UserType[]
-  | DecorationType[];
+  | DecorationType[]
+  | { name: string; url: string }[];
 
 export interface BaseValueType {
   id: string;
