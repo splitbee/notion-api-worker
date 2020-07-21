@@ -8,7 +8,7 @@ export const idToUuid = (path: string) =>
 
 export const parsePageId = (id: string) => {
   if (id) {
-    const rawId = id.replace(/\-/g, "").slice(-32);
+    const rawId = id.replace(/-/g, "").slice(-32);
     return idToUuid(rawId);
   }
 };

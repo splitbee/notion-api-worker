@@ -37,7 +37,7 @@ export const getTableData = async (
   const rows: Row[] = [];
 
   for (const td of tableData) {
-    let row: Row = { id: td.value.id };
+    const row: Row = { id: td.value.id };
 
     for (const key of collectionColKeys) {
       const val = td.value.properties[key];
@@ -50,6 +50,7 @@ export const getTableData = async (
         }
       }
     }
+
     rows.push(row);
   }
 
