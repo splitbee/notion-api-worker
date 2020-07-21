@@ -27,6 +27,7 @@ export interface Caches {
   };
 }
 
+// eslint-disable-next-line no-unused-vars
 declare let caches: Caches;
 
 declare global {
