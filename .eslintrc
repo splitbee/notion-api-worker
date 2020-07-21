@@ -8,9 +8,17 @@
     "plugin:prettier/recommended"
   ],
   "env": {
-    "node": true
+    "worker": true
   },
   "parserOptions": {
     "sourceType": "module"
-  }
+  },
+  "overrides": [
+    {
+      "files": "webpack.config.js",
+      "env": {
+        "node": true
+      }
+    }
+  ]
 }
