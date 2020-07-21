@@ -62,7 +62,9 @@ const handleRequest = async (fetchEvent: FetchEvent): Promise<Response> => {
   if (cacheKey) {
     try {
       response = await cache.match(cacheKey);
-    } catch (err) {}
+    } catch (err) {
+      // ignore
+    }
   }
 
   const getResponseAndPersist = async () => {
