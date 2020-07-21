@@ -6,6 +6,7 @@ import { tableRoute } from "./routes/table";
 import { userRoute } from "./routes/user";
 import { searchRoute } from "./routes/search";
 import { createResponse } from "./response";
+import { getCacheKey } from "./get-cache-key";
 import * as types from "./api/types";
 
 export type Handler = (
@@ -55,14 +56,14 @@ const handleRequest = async (fetchEvent: FetchEvent): Promise<Response> => {
     return new Response("Endpoint not found.", { status: 404 });
   }
 
-  const cacheKey = request.url;
+  const cacheKey = getCacheKey(request);
   let response;
-  try {
-    const cachedResponse = await cache.match(cacheKey);
-    if (cachedResponse) {
-      response = cachedResponse;
-    }
-  } catch (err) {}
+
+  if (cacheKey) {
+    try {
+      response = await cache.match(cacheKey);
+    } catch (err) {}
+  }
 
   const getResponseAndPersist = async () => {
     const res = await match.handler({
@@ -72,7 +73,10 @@ const handleRequest = async (fetchEvent: FetchEvent): Promise<Response> => {
       notionToken,
     });
 
-    await cache.put(cacheKey, res.clone());
+    if (cacheKey) {
+      await cache.put(cacheKey, res.clone());
+    }
+
     return res;
   };
 
