@@ -20,7 +20,7 @@ export async function pageRoute(req: HandlerRequest) {
 
     const pendingBlocks = allBlockKeys.flatMap((blockId) => {
       const block = allBlocks[blockId];
-      const content = block.value.content;
+      const content = block.value && block.value.content;
 
       return content && block.value.type !== "page"
         ? content.filter((id: string) => !allBlocks[id])
