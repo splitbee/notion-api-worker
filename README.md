@@ -60,3 +60,4 @@ To obtain your token, login to Notion and open your DevTools and find your cooki
 
 - [Timo Lins](https://twitter.com/timolins) – Idea, Documentation
 - [Tobias Lins](https://twitter.com/linstobias) – Code
+- [Travis Fischer](https://twitter.com/transitive_bs) – Code
