@@ -10,6 +10,7 @@ export const createResponse = (
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, OPTIONS",
+      "Content-Type": "application/json",
       ...headers,
     },
   });
