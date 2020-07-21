@@ -13,12 +13,12 @@
     "tiny-request-router": "^1.2.2"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^1.0.9",
-    "@cloudflare/wrangler": "^1.10.1",
-    "@types/node": "^13.13.1",
-    "prettier": "^2.0.4",
-    "ts-loader": "^7.0.1",
-    "typescript": "^3.8.3",
+    "@cloudflare/workers-types": "^2.0.0",
+    "@cloudflare/wrangler": "^1.10.3",
+    "@types/node": "^14.0.24",
+    "prettier": "^2.0.5",
+    "ts-loader": "^8.0.1",
+    "typescript": "^3.9.7",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.12"
   }
