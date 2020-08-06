@@ -1,4 +1,8 @@
-import { fetchPageById, fetchTableData, fetchNotionUsers } from "../api/notion";
+import {
+  fetchPageById,
+  fetchCollectionData,
+  fetchNotionUsers,
+} from "../api/notion";
 import { parsePageId, getNotionValue } from "../api/utils";
 import {
   RowContentType,
@@ -8,13 +12,13 @@ import {
 } from "../api/types";
 import { createResponse } from "../response";
 
-export const getTableData = async (
+export const getCollectionData = async (
   collection: CollectionType,
   collectionViewId: string,
   notionToken?: string,
   raw?: boolean
 ) => {
-  const table = await fetchTableData(
+  const table = await fetchCollectionData(
     collection.value.id,
     collectionViewId,
     notionToken
@@ -37,35 +41,39 @@ export const getTableData = async (
   const rows: Row[] = [];
 
   for (const td of tableData) {
-    let row: Row = { id: td.value.id };
+    const row: Row = { id: td.value.id };
 
     for (const key of collectionColKeys) {
       const val = td.value.properties[key];
+
       if (val) {
         const schema = collectionRows[key];
         row[schema.name] = raw ? val : getNotionValue(val, schema.type);
+
         if (schema.type === "person" && row[schema.name]) {
           const users = await fetchNotionUsers(row[schema.name] as string[]);
           row[schema.name] = users as any;
         }
       }
     }
+
     rows.push(row);
   }
 
   return { rows, schema: collectionRows };
 };
 
-export async function tableRoute(req: HandlerRequest) {
+export async function collectionRoute(req: HandlerRequest) {
   const pageId = parsePageId(req.params.pageId);
   const page = await fetchPageById(pageId!, req.notionToken);
 
-  if (!page.recordMap.collection)
+  if (!page.recordMap.collection) {
     return createResponse(
       JSON.stringify({ error: "No table found on Notion page: " + pageId }),
       {},
       401
     );
+  }
 
   const collection = Object.keys(page.recordMap.collection).map(
     (k) => page.recordMap.collection[k]
@@ -77,7 +85,7 @@ export async function tableRoute(req: HandlerRequest) {
     (k) => page.recordMap.collection_view[k]
   )[0];
 
-  const { rows } = await getTableData(
+  const { rows } = await getCollectionData(
     collection,
     collectionView.value.id,
     req.notionToken

@@ -1,7 +1,7 @@
 import { fetchPageById, fetchBlocks } from "../api/notion";
 import { parsePageId } from "../api/utils";
 import { createResponse } from "../response";
-import { getTableData } from "./table";
+import { getCollectionData } from "./collection";
 import { BlockType, HandlerRequest } from "../api/types";
 
 export async function pageRoute(req: HandlerRequest) {
@@ -38,46 +38,47 @@ export async function pageRoute(req: HandlerRequest) {
     allBlocks = { ...allBlocks, ...newBlocks };
   }
 
-  const collection = page.recordMap.collection
-    ? page.recordMap.collection[Object.keys(page.recordMap.collection)[0]]
-    : null;
+  const allCollectionInstances = allBlockKeys.flatMap((blockId) => {
+    const block = allBlocks[blockId];
 
-  const collectionView = page.recordMap.collection_view
-    ? page.recordMap.collection_view[
-        Object.keys(page.recordMap.collection_view)[0]
-      ]
-    : null;
+    return block.value.type === "collection_view"
+      ? [
+          {
+            id: block.value.id,
+            collectionId: block.value.collection_id as string,
+            collectionViewId: block.value.view_ids[0],
+          },
+        ]
+      : [];
+  });
 
-  if (collection && collectionView) {
-    const pendingCollections = allBlockKeys.flatMap((blockId) => {
-      const block = allBlocks[blockId];
+  for (const collectionInstance of allCollectionInstances) {
+    const { id, collectionId, collectionViewId } = collectionInstance;
+    const collection = page.recordMap.collection[collectionId];
 
-      return block.value.type === "collection_view" ? [block.value.id] : [];
-    });
+    const { rows, schema } = await getCollectionData(
+      collection,
+      collectionViewId,
+      req.notionToken,
+      true
+    );
 
-    for (let b of pendingCollections) {
-      const { rows, schema } = await getTableData(
-        collection,
-        collectionView.value.id,
-        req.notionToken,
-        true
-      );
+    const viewIds = allBlocks[id].value.view_ids;
 
-      const viewIds = (allBlocks[b] as any).value.view_ids as string[];
-
-      allBlocks[b] = {
-        ...allBlocks[b],
-        collection: {
-          title: collection.value.name,
-          schema,
-          types: viewIds.map((id) => {
+    allBlocks[id] = {
+      ...allBlocks[id],
+      collection: {
+        title: collection.value.name,
+        schema,
+        views: viewIds
+          .map((id) => {
             const col = page.recordMap.collection_view[id];
             return col ? col.value : undefined;
-          }),
-          data: rows,
-        },
-      };
-    }
+          })
+          .filter(Boolean),
+        data: rows,
+      },
+    };
   }
 
   return createResponse(allBlocks);

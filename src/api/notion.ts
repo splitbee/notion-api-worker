@@ -64,7 +64,7 @@ const queryCollectionBody = {
   },
 };
 
-export const fetchTableData = async (
+export const fetchCollectionData = async (
   collectionId: string,
   collectionViewId: string,
   notionToken?: string
