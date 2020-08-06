@@ -21,6 +21,7 @@ export const getCollectionData = async (
   const table = await fetchCollectionData(
     collection.value.id,
     collectionViewId,
+    "table", // TODO
     notionToken
   );
 
