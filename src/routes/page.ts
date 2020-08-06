@@ -45,8 +45,8 @@ export async function pageRoute(req: HandlerRequest) {
       ? [
           {
             id: block.value.id,
-            collectionId: block.value.collection_id as string,
-            collectionViewId: block.value.view_ids[0],
+            collectionId: block.value.collection_id!,
+            collectionViewId: block.value.view_ids![0],
           },
         ]
       : [];
@@ -63,7 +63,7 @@ export async function pageRoute(req: HandlerRequest) {
       true
     );
 
-    const viewIds = allBlocks[id].value.view_ids;
+    const viewIds = allBlocks[id].value.view_ids!;
 
     allBlocks[id] = {
       ...allBlocks[id],

@@ -72,7 +72,7 @@ export interface BaseValueType {
   last_edited_by_id: string;
   content?: string[];
   collection_id?: string;
-  view_ids: string[];
+  view_ids?: string[];
 }
 
 export interface CollectionType {

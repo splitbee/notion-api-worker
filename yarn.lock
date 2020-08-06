@@ -14,13 +14,6 @@
   dependencies:
     binary-install "0.0.1"
 
-"@types/format-number@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@types/format-number/-/format-number-3.0.0.tgz#5df4a2ac6621ea3283d698d3f76285a46857dd6d"
-  integrity sha512-M8UODsXPDdccOcz8pvhAraGFz+/cnlzd3cN3mGoCelA7aTj1iP1ExaIHfzq4I9s+Rd9FjJ3y20kItNOk9MPUTw==
-  dependencies:
-    format-number "*"
-
 "@types/node@^14.0.27":
   version "14.0.27"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.0.27.tgz#a151873af5a5e851b51b3b065c9e63390a9e0eb1"
@@ -1081,11 +1074,6 @@ for-in@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/for-in/-/for-in-1.0.2.tgz#81068d295a8142ec0ac726c6e2200c30fb6d5e80"
   integrity sha1-gQaNKVqBQuwKxybG4iAMMPttXoA=
-
-format-number@*:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/format-number/-/format-number-3.0.0.tgz#92bbf34ce5e04eb637a9a3a4f65980d5af137393"
-  integrity sha512-RWcbtINcRZ2DWCo4EcJgOJUYIwtsY5LKlTtL5OX1vfGsxEEK5mKaGxZC0p4Mgy63vXR12rut3lnjwCQ8YIlRMw==
 
 fragment-cache@^0.2.1:
   version "0.2.1"

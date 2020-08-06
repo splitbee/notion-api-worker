@@ -15,7 +15,6 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^2.0.0",
     "@cloudflare/wrangler": "^1.10.3",
-    "@types/format-number": "^3.0.0",
     "@types/node": "^14.0.27",
     "prettier": "^2.0.5",
     "ts-loader": "^8.0.2",
