@@ -52,21 +52,10 @@ export const fetchPageById = async (pageId: string, notionToken?: string) => {
   return res;
 };
 
-const queryCollectionBody = {
-  query: { aggregations: [{ property: "title", aggregator: "count" }] },
-  loader: {
-    type: "table",
-    limit: 999,
-    searchQuery: "",
-    userTimeZone: "Europe/Vienna",
-    userLocale: "en",
-    loadContentCover: true,
-  },
-};
-
-export const fetchTableData = async (
+export const fetchCollectionData = async (
   collectionId: string,
   collectionViewId: string,
+  collectionType: string = "table",
   notionToken?: string
 ) => {
   const table = await fetchNotionData<CollectionData>({
@@ -74,7 +63,15 @@ export const fetchTableData = async (
     body: {
       collectionId,
       collectionViewId,
-      ...queryCollectionBody,
+      query: { aggregations: [{ property: "title", aggregator: "count" }] },
+      loader: {
+        type: collectionType,
+        limit: 999,
+        searchQuery: "",
+        userTimeZone: "Europe/Vienna",
+        userLocale: "en",
+        loadContentCover: true,
+      },
     },
     notionToken,
   });
