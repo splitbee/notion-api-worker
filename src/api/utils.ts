@@ -1,4 +1,10 @@
-import { DecorationType, ColumnType, RowContentType } from "./types";
+import {
+  DecorationType,
+  ColumnType,
+  RowContentType,
+  BlockType,
+  RowType,
+} from "./types";
 
 export const idToUuid = (path: string) =>
   `${path.substr(0, 8)}-${path.substr(8, 4)}-${path.substr(
@@ -15,7 +21,8 @@ export const parsePageId = (id: string) => {
 
 export const getNotionValue = (
   val: DecorationType[],
-  type: ColumnType
+  type: ColumnType,
+  row: RowType
 ): RowContentType => {
   switch (type) {
     case "text":
@@ -44,7 +51,23 @@ export const getNotionValue = (
     case "file":
       return val
         .filter((v) => v.length > 1)
-        .map((v) => ({ name: v[0] as string, url: v[1]![0][1] as string }));
+        .map((v) => {
+          const rawUrl = v[1]![0][1] as string;
+
+          const url = new URL(
+            `https://www.notion.so${
+              rawUrl.startsWith("/image")
+                ? rawUrl
+                : `/image/${encodeURIComponent(rawUrl)}`
+            }`
+          );
+
+          url.searchParams.set("table", "block");
+          url.searchParams.set("id", row.value.id);
+          url.searchParams.set("cache", "v2");
+
+          return { name: v[0] as string, url: url.toString(), rawUrl };
+        });
     default:
       console.log({ val, type });
       return "Not supported";

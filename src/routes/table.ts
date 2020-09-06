@@ -43,7 +43,7 @@ export const getTableData = async (
       const val = td.value.properties[key];
       if (val) {
         const schema = collectionRows[key];
-        row[schema.name] = raw ? val : getNotionValue(val, schema.type);
+        row[schema.name] = raw ? val : getNotionValue(val, schema.type, td);
         if (schema.type === "person" && row[schema.name]) {
           const users = await fetchNotionUsers(row[schema.name] as string[]);
           row[schema.name] = users as any;
