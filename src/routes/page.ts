@@ -2,7 +2,7 @@ import { fetchPageById, fetchBlocks } from "../api/notion";
 import { parsePageId } from "../api/utils";
 import { createResponse } from "../response";
 import { getTableData } from "./table";
-import { BlockType, HandlerRequest } from "../api/types";
+import { BlockType, CollectionType, HandlerRequest } from "../api/types";
 
 export async function pageRoute(req: HandlerRequest) {
   const pageId = parsePageId(req.params.pageId);
@@ -56,9 +56,21 @@ export async function pageRoute(req: HandlerRequest) {
     });
 
     for (let b of pendingCollections) {
+      const collPage = await fetchPageById(b!, req.notionToken);
+
+      const coll = Object.keys(collPage.recordMap.collection).map(
+        (k) => collPage.recordMap.collection[k]
+      )[0];
+
+      const collView: {
+        value: { id: CollectionType["value"]["id"] };
+      } = Object.keys(collPage.recordMap.collection_view).map(
+        (k) => collPage.recordMap.collection_view[k]
+      )[0];
+
       const { rows, schema } = await getTableData(
-        collection,
-        collectionView.value.id,
+        coll,
+        collView.value.id,
         req.notionToken,
         true
       );
@@ -68,10 +80,10 @@ export async function pageRoute(req: HandlerRequest) {
       allBlocks[b] = {
         ...allBlocks[b],
         collection: {
-          title: collection.value.name,
+          title: coll.value.name,
           schema,
           types: viewIds.map((id) => {
-            const col = page.recordMap.collection_view[id];
+            const col = collPage.recordMap.collection_view[id];
             return col ? col.value : undefined;
           }),
           data: rows,
