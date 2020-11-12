@@ -31,7 +31,7 @@ export async function pageRoute(req: HandlerRequest) {
       break;
     }
 
-    const newBlocks = await fetchBlocks(pendingBlocks).then(
+    const newBlocks = await fetchBlocks(pendingBlocks, req.notionToken).then(
       (res) => res.recordMap.block
     );
 
