@@ -39,6 +39,9 @@ export const getNotionValue = (
     case "title":
       return getTextContent(val);
     case "select":
+    case "email":
+    case "phone_number":
+    case "url":
       return val[0][0];
     case "multi_select":
       return val[0][0].split(",") as string[];

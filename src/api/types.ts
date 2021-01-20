@@ -38,7 +38,10 @@ export type ColumnType =
   | "multi_select"
   | "number"
   | "relation"
-  | "file";
+  | "file"
+  | "email"
+  | "phone_number"
+  | "url";
 
 export type ColumnSchemaType = {
   name: string;
