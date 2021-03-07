@@ -56,7 +56,7 @@ const queryCollectionBody = {
   query: { aggregations: [{ property: "title", aggregator: "count" }] },
   loader: {
     type: "table",
-    limit: 100,
+    limit: 999,
     searchQuery: "",
     userTimeZone: "Europe/Vienna",
     userLocale: "en",
