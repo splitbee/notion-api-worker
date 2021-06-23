@@ -1,13 +1,12 @@
 {
   "name": "notion-api-worker",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
     "build": "webpack",
     "dev": "wrangler dev",
     "preview": "wrangler preview",
-    "publish": "wrangler publish",
     "deploy": "wrangler publish -e production"
   },
   "dependencies": {
