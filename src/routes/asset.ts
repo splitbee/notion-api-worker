@@ -20,6 +20,3 @@ export async function assetRoute(req: HandlerRequest) {
   return createResponse(asset);
 }
 
-
-
-// http://127.0.0.1:8787/v1/asset?url=https://s3-us-west-2.amazonaws.com/secure.notion-static.com/7b07bcc5-c445-4646-92e7-80778396bf0f/fmicb-11-00397_(1).pdf&blockId=6cc938f5-76fc-4069-8315-d776778afc71
