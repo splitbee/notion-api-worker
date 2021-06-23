@@ -15,10 +15,8 @@ export async function assetRoute(req: HandlerRequest) {
       400
     );
 
-    console.log('getting', fileUrl, blockId)
   const asset = await fetchNotionAsset(fileUrl, blockId);
 
-  console.log('asset response:', asset)
   return createResponse(asset);
 }
 

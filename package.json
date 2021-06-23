@@ -7,6 +7,7 @@
     "build": "webpack",
     "dev": "wrangler dev",
     "preview": "wrangler preview",
+    "publish": "wrangler publish",
     "deploy": "wrangler publish -e production"
   },
   "dependencies": {
