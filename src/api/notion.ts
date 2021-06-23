@@ -125,6 +125,32 @@ export const fetchBlocks = async (
   });
 };
 
+
+export const fetchNotionAsset = async (
+  fileUrl: string,
+  blockId: string,
+) => {
+  return await fetchNotionData({
+    resource: "getSignedFileUrls",
+    body: {
+      urls: [
+        {
+          url: fileUrl,
+          permissionRecord: {
+            table: "block",
+            id: blockId
+          }
+        }
+      ]
+    },
+  });
+};
+
+
+
+
+
+
 export const fetchNotionSearch = async (
   params: NotionSearchParamsType,
   notionToken?: string
