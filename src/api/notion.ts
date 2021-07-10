@@ -33,10 +33,13 @@ const fetchNotionData = async <T extends any>({
       "content-type": "application/json",
       ...(notionToken && { cookie: `token_v2=${notionToken}` }),
     },
+
     body: JSON.stringify(body),
   });
-
-  return res.json();
+  
+  let json = await res.json()
+  // console.log('fetchNotionData:', json)
+  return json;
 };
 
 export const fetchPageById = async (pageId: string, notionToken?: string) => {
@@ -78,6 +81,7 @@ export const fetchTableData = async (
     },
     notionToken,
   });
+  // console.log('fetchTableData:', table)
   return table;
 };
 
@@ -124,6 +128,32 @@ export const fetchBlocks = async (
     notionToken,
   });
 };
+
+
+export const fetchNotionAsset = async (
+  fileUrl: string,
+  blockId: string,
+) => {
+  return await fetchNotionData({
+    resource: "getSignedFileUrls",
+    body: {
+      urls: [
+        {
+          url: fileUrl,
+          permissionRecord: {
+            table: "block",
+            id: blockId
+          }
+        }
+      ]
+    },
+  });
+};
+
+
+
+
+
 
 export const fetchNotionSearch = async (
   params: NotionSearchParamsType,

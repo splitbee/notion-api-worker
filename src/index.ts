@@ -3,7 +3,10 @@ import { Router, Method } from "tiny-request-router";
 
 import { pageRoute } from "./routes/page";
 import { tableRoute } from "./routes/table";
+import { collectionRoute } from "./routes/collection";
 import { userRoute } from "./routes/user";
+import { assetRoute } from "./routes/asset";
+import { fileRoute } from "./routes/file";
 import { searchRoute } from "./routes/search";
 import { createResponse } from "./response";
 import { getCacheKey } from "./get-cache-key";
@@ -24,14 +27,17 @@ const router = new Router<Handler>();
 router.options("*", () => new Response(null, { headers: corsHeaders }));
 router.get("/v1/page/:pageId", pageRoute);
 router.get("/v1/table/:pageId", tableRoute);
+router.get("/v1/collection/:pageId", collectionRoute);
 router.get("/v1/user/:userId", userRoute);
 router.get("/v1/search", searchRoute);
+router.get("/v1/asset", assetRoute);
+router.get("/v1/file", fileRoute);
 
 router.get("*", async () =>
   createResponse(
     {
       error: `Route not found!`,
-      routes: ["/v1/page/:pageId", "/v1/table/:pageId", "/v1/user/:pageId"],
+      routes: ["/v1/page/:pageId", "/v1/table/:pageId", "/v1/user/:pageId", "/v1/asset?url=[filename]&blockId=[id]"],
     },
     {},
     404
