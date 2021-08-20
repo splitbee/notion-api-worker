@@ -8,6 +8,25 @@ We provide a hosted version of this project on [`https://notion-api.splitbee.io`
 
 _Use with caution. This is based on the private Notion API. We can not gurantee it will stay stable._
 
+## Quickstart Instructions Atila
+
+1. Get API Key from Atila admin (Tomiwa or Hadi) and run `wrangler config`
+
+1. Enter the API Token when prompted
+    1. Note: this is not a global API key but a specific token with cloudflare permissions
+
+1. Run `wrangler dev` and visit http://127.0.0.1:8787
+
+1. If ready for deployment, run `wranger publish`
+
+Preview at
+
+https://notion-api-worker.atila.workers.dev
+
+https://notion-api-worker.atila.workers.dev/v1/page/74bc2f432a93491db6d82e096d5dfcbf
+
+http://127.0.0.1:8787/v1/page/74bc2f432a93491db6d82e096d5dfcbf
+
 ## Features
 
 🍭 **Easy to use** – Receive Notion data with a single GET request
