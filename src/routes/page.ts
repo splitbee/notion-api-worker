@@ -22,9 +22,12 @@ export async function pageRoute(req: HandlerRequest) {
       const block = allBlocks[blockId];
       const content = block.value && block.value.content;
 
-      return content && block.value.type !== "page"
-        ? content.filter((id: string) => !allBlocks[id])
-        : [];
+      if (!content || (block.value.type === "page" && blockId !== pageId!)) {
+        // skips pages other than the requested page
+        return [];
+      }
+
+      return content.filter((id: string) => !allBlocks[id]);
     });
 
     if (!pendingBlocks.length) {
