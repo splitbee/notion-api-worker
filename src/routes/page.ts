@@ -16,11 +16,15 @@ export async function pageRoute(req: HandlerRequest) {
   let allBlockKeys;
 
   while (true) {
+    allBlockKeys = Object.keys(allBlocks);
 
-    allBlockKeys = allBlocks[pageId!].value.content
+    const pendingBlocks = allBlockKeys.flatMap((blockId) => {
+      const block = allBlocks[blockId];
+      const content = block.value && block.value.content;
 
-    const pendingBlocks = allBlockKeys!.filter((blockId) => {
-      return !allBlocks.hasOwnProperty(blockId)
+      return content && block.value.type !== "page"
+        ? content.filter((id: string) => !allBlocks[id])
+        : [];
     });
 
     if (!pendingBlocks.length) {
