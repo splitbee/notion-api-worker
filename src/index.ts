@@ -1,3 +1,4 @@
+// @ts-ignore
 import {} from "@cloudflare/workers-types";
 import { Router, Method } from "tiny-request-router";
 

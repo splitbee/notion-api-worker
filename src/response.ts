@@ -11,6 +11,7 @@ export const createResponse = (
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, OPTIONS",
       "Content-Type": "application/json",
+      "Cache-Control": "max-age=600",
       ...headers,
     },
   });
