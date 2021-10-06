@@ -53,14 +53,24 @@ export const fetchPageById = async (pageId: string, notionToken?: string) => {
 };
 
 const queryCollectionBody = {
-  query: { aggregations: [{ property: "title", aggregator: "count" }] },
   loader: {
-    type: "table",
-    limit: 999,
+    type: "reducer",
+    reducers: {
+      collection_group_results: {
+        type: "results",
+        limit: 999,
+        loadContentCover: true,
+      },
+      "table:uncategorized:title:count": {
+        type: "aggregation",
+        aggregation: {
+          property: "title",
+          aggregator: "count",
+        },
+      },
+    },
     searchQuery: "",
     userTimeZone: "Europe/Vienna",
-    userLocale: "en",
-    loadContentCover: true,
   },
 };
 
@@ -72,12 +82,17 @@ export const fetchTableData = async (
   const table = await fetchNotionData<CollectionData>({
     resource: "queryCollection",
     body: {
-      collectionId,
-      collectionViewId,
+      collection: {
+        id: collectionId,
+      },
+      collectionView: {
+        id: collectionViewId,
+      },
       ...queryCollectionBody,
     },
     notionToken,
   });
+
   return table;
 };
 
