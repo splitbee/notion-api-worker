@@ -23,7 +23,16 @@ export const getTableData = async (
   const collectionRows = collection.value.schema;
   const collectionColKeys = Object.keys(collectionRows);
 
-  const tableArr: RowType[] = table.result.blockIds.map(
+  // console.log('>>>>> table block ids?!', table.result)
+
+  type Row = { id: string; [key: string]: RowContentType };
+
+  const rows: Row[] = [];
+
+  if(!table.result) // no tables
+    return { rows, schema: collectionRows };
+
+  const tableArr: RowType[] = table.result.reducerResults.collection_group_results.blockIds.map(
     (id: string) => table.recordMap.block[id]
   );
 
@@ -32,9 +41,6 @@ export const getTableData = async (
       b.value && b.value.properties && b.value.parent_id === collection.value.id
   );
 
-  type Row = { id: string; [key: string]: RowContentType };
-
-  const rows: Row[] = [];
 
   for (const td of tableData) {
     let row: Row = { id: td.value.id };

@@ -22,9 +22,12 @@ export async function pageRoute(req: HandlerRequest) {
       const block = allBlocks[blockId];
       const content = block.value && block.value.content;
 
-      return content && block.value.type !== "page"
-        ? content.filter((id: string) => !allBlocks[id])
-        : [];
+      if (!content || (block.value.type === "page" && blockId !== pageId!)) {
+        // skips pages other than the requested page
+        return [];
+      }
+
+      return content.filter((id: string) => !allBlocks[id]);
     });
 
     if (!pendingBlocks.length) {
@@ -67,6 +70,8 @@ export async function pageRoute(req: HandlerRequest) {
       } = Object.keys(collPage.recordMap.collection_view).map(
         (k) => collPage.recordMap.collection_view[k]
       )[0];
+
+      // console.log('>>>>> page getting table data')
 
       const { rows, schema } = await getTableData(
         coll,

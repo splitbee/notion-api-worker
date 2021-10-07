@@ -165,7 +165,9 @@ export interface CollectionData {
     };
   };
   result: {
-    blockIds: string[];
+    reducerResults: {
+      collection_group_results: { blockIds: string[] };
+    };
   };
 }
 

@@ -20,6 +20,8 @@ const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "*",
   "Access-Control-Allow-Methods": "GET, HEAD, POST, OPTIONS",
+  // "Cache-Control":`public, s-maxage=${30}, max-age=${60*60*0.1}, stale-while-revalidate=${60*4}`, 
+  "Cache-Control":`public, s-maxage=${10}, max-age=${10}, stale-while-revalidate=${10}`, 
 };
 
 const router = new Router<Handler>();
@@ -86,6 +88,7 @@ const handleRequest = async (fetchEvent: FetchEvent): Promise<Response> => {
     return res;
   };
 
+  // console.log('responding ...')
   if (response) {
     fetchEvent.waitUntil(getResponseAndPersist());
     return response;
