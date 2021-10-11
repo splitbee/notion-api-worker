@@ -8,12 +8,23 @@ export async function pageRoute(req: HandlerRequest) {
   const pageId = parsePageId(req.params.pageId);
   const page = await fetchPageById(pageId!, req.notionToken);
 
+  if (!pageId || !page.recordMap)
+    console.error(`Page not found at [ID:${req.params.pageId}]`)
+    return createResponse(
+      JSON.stringify({ error: "No page found on Notion at: " + pageId }),
+      {},
+      401
+    );
+
+
   const baseBlocks = page.recordMap.block;
 
   let allBlocks: { [id: string]: BlockType & { collection?: any } } = {
     ...baseBlocks,
   };
   let allBlockKeys;
+
+
 
   while (true) {
     allBlockKeys = Object.keys(allBlocks);
