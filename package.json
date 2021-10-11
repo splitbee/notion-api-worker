@@ -7,7 +7,8 @@
     "build": "webpack",
     "dev": "wrangler dev",
     "preview": "wrangler preview",
-    "deploy": "wrangler publish"
+    "deploy": "wrangler publish",
+    "prod": "wrangler publish"
   },
   "dependencies": {
     "tiny-request-router": "^1.2.2"
