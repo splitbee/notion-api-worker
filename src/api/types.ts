@@ -45,6 +45,7 @@ export type ColumnType =
 
 export type ColumnSchemaType = {
   name: string;
+  options: string[];
   type: ColumnType;
 };
 
@@ -56,6 +57,7 @@ export type RowContentType =
   | number
   | string[]
   | { title: string; id: string }
+  | { type:string, start_date:string, end_date?:string, end_time?:string, time_zone?: string, start_time?:string, date_format?:string }
   | UserType[]
   | DecorationType[]
   | { name: string; url: string }[];

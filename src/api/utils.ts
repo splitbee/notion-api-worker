@@ -34,8 +34,11 @@ export const getNotionValue = (
     case "checkbox":
       return val[0][0] === "Yes";
     case "date":
-      if (val[0][1]![0][0] === "d") return val[0]![1]![0]![1]!.start_date;
-      else return "";
+      if (val[0][1]! && val[0][1]![0][0] === "d") {
+        return val[0]![1]![0]![1];
+      }
+      else 
+        return "";
     case "title":
       return getTextContent(val);
     case "select":
