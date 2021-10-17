@@ -1,5 +1,7 @@
 import { fetchPageById, fetchTableData, fetchNotionUsers } from "../api/notion";
 import { parsePageId, getNotionValue } from "../api/utils";
+import { fetchNotionAsset } from "../api/notion";
+
 import {
   RowContentType,
   CollectionType,
@@ -33,13 +35,13 @@ export const getCollectionData = async (
       b.value && b.value.properties && b.value.parent_id === collection.value.id
   );
 
-  type Row = { id: string; [key: string]: RowContentType };
+  type Row = { id: string; format: any; [key: string]: RowContentType };
 
   const rows: Row[] = [];
-
+  const tds = []
   for (const td of tableData) {
-    let row: Row = { id: td.value.id };
-
+    let row: Row = { id: td.value.id, format: td.value.format };
+    tds.push(td)
     for (const key of collectionColKeys) {
       const val = td.value.properties[key];
       if (val) {
@@ -51,6 +53,13 @@ export const getCollectionData = async (
         }
       }
     }
+
+    if(row.format && row.format.page_cover) {
+      let asset:any = await fetchNotionAsset(row.format.page_cover, row.id)
+      if (asset && asset.url && asset.url.signedUrls && asset.url.signedUrls[0])
+        row.format.page_cover = asset.url.signedUrls[0]
+    }
+
     rows.push(row);
   }
 
@@ -59,7 +68,7 @@ export const getCollectionData = async (
 
 
   
-  return { rows, schema: collectionRows, name };
+  return { rows, schema: collectionRows, name, tableArr};
 };
 
 

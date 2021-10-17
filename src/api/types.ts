@@ -96,6 +96,7 @@ export interface RowType {
   value: {
     id: string;
     parent_id: string;
+    format: any;
     properties: { [key: string]: DecorationType[] };
   };
 }
