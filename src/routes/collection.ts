@@ -64,9 +64,6 @@ export const getCollectionData = async (
   }
 
   const name: String = collection.value.name.join('')
-
-
-
   
   return { rows, schema: collectionRows, name, tableArr};
 };

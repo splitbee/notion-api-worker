@@ -26,6 +26,7 @@ export const getNotionValue = (
 ): RowContentType => {
   switch (type) {
     case "text":
+      // return val; // includes formatted content like bold and anchors, but a pain to parse
       return getTextContent(val);
     case "person":
       return (
@@ -55,11 +56,15 @@ export const getNotionValue = (
         .filter(([symbol]) => symbol === "‣")
         .map(([_, relation]) => relation![0][1] as string);
     case "file":
+      if(!val[0][1]) // file is embedded link
+        return [{'name': val[0][0].toString(), 'url': val[0][0].toString()}]
+
       return val
         .filter((v) => v.length > 1)
         .map((v) => {
-          const rawUrl = v[1]![0][1] as string;
 
+          const rawUrl = v[1]![0][1] as string;
+          
           const url = new URL(
             `https://www.notion.so${
               rawUrl.startsWith("/image")
