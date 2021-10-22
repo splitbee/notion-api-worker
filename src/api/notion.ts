@@ -38,7 +38,6 @@ const fetchNotionData = async <T extends any>({
   });
   
   let json = await res.json()
-  // console.log('fetchNotionData:', json)
   return json;
 };
 

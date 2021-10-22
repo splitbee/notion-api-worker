@@ -6,6 +6,7 @@ import { tableRoute } from "./routes/table";
 import { collectionRoute } from "./routes/collection";
 import { userRoute } from "./routes/user";
 import { assetRoute } from "./routes/asset";
+import { blockRoute } from "./routes/block";
 import { fileRoute } from "./routes/file";
 import { searchRoute } from "./routes/search";
 import { createResponse } from "./response";
@@ -33,13 +34,14 @@ router.get("/v1/collection/:pageId", collectionRoute);
 router.get("/v1/user/:userId", userRoute);
 router.get("/v1/search", searchRoute);
 router.get("/v1/asset", assetRoute);
+router.get("/v1/block/:blockId", blockRoute);
 router.get("/v1/file", fileRoute);
 
 router.get("*", async () =>
   createResponse(
     {
       error: `Route not found!`,
-      routes: ["/v1/page/:pageId", "/v1/table/:pageId", "/v1/user/:pageId", "/v1/asset?url=[filename]&blockId=[id]"],
+      routes: ["/v1/page/:pageId", "/v1/table/:pageId", "/v1/user/:pageId", "/v1/asset?url=[filename]&blockId=[id]", "/v1/:blockId"],
     },
     {},
     404
