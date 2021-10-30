@@ -23,6 +23,7 @@ module.exports = {
           transpileOnly: true,
         },
       },
+      { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
     ],
   },
   optimization: {

@@ -99,6 +99,8 @@ const handleRequest = async (fetchEvent: FetchEvent): Promise<Response> => {
   return getResponseAndPersist();
 };
 
+
+// cloudflare workers entry
 self.addEventListener("fetch", async (event: Event) => {
   const fetchEvent = event as FetchEvent;
   fetchEvent.respondWith(handleRequest(fetchEvent));

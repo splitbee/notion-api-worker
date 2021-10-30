@@ -1,3 +1,4 @@
+
 import {
   JSONData,
   NotionUserType,
@@ -22,23 +23,32 @@ const loadPageChunkBody = {
   verticalColumns: false,
 };
 
+let ctr=0
+
 const fetchNotionData = async <T extends any>({
   resource,
   body,
   notionToken,
 }: INotionParams): Promise<T> => {
-  const res = await fetch(`${NOTION_API}/${resource}`, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      ...(notionToken && { cookie: `token_v2=${notionToken}` }),
-    },
-
-    body: JSON.stringify(body),
-  });
+  try {
+    const res = await fetch(`${NOTION_API}/${resource}`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "referer": "https://phagedirectory.notion.site/CUE-REDCap-eCRF-Data-Dictionary-Model-ca9b547e6ab5411e96c432024ed61b52",
+        "origin": "https://phagedirectory.notion.site",
+        ...(notionToken && { cookie: `token_v2=${notionToken}` }),
+      },
   
-  let json = await res.json()
-  return json;
+      body: JSON.stringify(body),
+    });
+    
+    let json = await res.json()
+    return json;
+  } catch(e) {
+    console.error('fetchNotionData error:', e)
+    throw new Error('Failed to pull data from Notion')
+  }
 };
 
 export const fetchPageById = async (pageId: string, notionToken?: string) => {
@@ -131,12 +141,11 @@ export const fetchBlocks = async (
   return await fetchNotionData<LoadPageChunkData>({
     resource: "syncRecordValues",
     body: {
-      recordVersionMap: {
-        block: blockList.reduce((obj, blockId) => {
-          obj[blockId] = -1;
-          return obj;
-        }, {} as { [key: string]: -1 }),
-      },
+      requests: blockList.map((id) => ({
+        id,
+        table: "block",
+        version: -1,
+      })),
     },
     notionToken,
   });
