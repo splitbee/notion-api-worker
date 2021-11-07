@@ -129,12 +129,11 @@ export const fetchBlocks = async (
   return await fetchNotionData<LoadPageChunkData>({
     resource: "syncRecordValues",
     body: {
-      recordVersionMap: {
-        block: blockList.reduce((obj, blockId) => {
-          obj[blockId] = -1;
-          return obj;
-        }, {} as { [key: string]: -1 }),
-      },
+      requests: blockList.map((id) => ({
+        id,
+        table: "block",
+        version: -1,
+      })),
     },
     notionToken,
   });
