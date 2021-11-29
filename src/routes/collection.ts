@@ -129,6 +129,7 @@ export async function collectionRoute(req: HandlerRequest) {
   let query_sort = views[0]['query2'] ? views[0]['query2'].sort : undefined
 
 
+  console.log('?!?!?!', query_sort)
 
 
 
@@ -208,17 +209,18 @@ export async function collectionRoute(req: HandlerRequest) {
     query_sort.map((qsort:any)=>{
       let column = tableProps.find((c:any)=>c.property==qsort.property)
       if(column.type=='multi_select' || column.type=='select') { // sort by column options array rank of first item, rather than a-z
+        
         if(qsort.direction=='ascending') {
           tableData.rows = tableData.rows.sort((a:any,b:any) => { // get the column ranks by matching against the value and getting their index, then sorting by col index
-            let _a = column.options.findIndex((e:any)=>e.value==a[column.name][0])
-            let _b = column.options.findIndex((e:any)=>e.value==b[column.name][0])
+            let _a = column.options.findIndex((e:any)=>e.value==a[column.name] && a[column.name][0])
+            let _b = column.options.findIndex((e:any)=>e.value==b[column.name] && b[column.name][0])
             return _a < _b ? -1 : 1
           })
         }
         else {
           tableData.rows = tableData.rows.sort((a:any,b:any) => { // get the column ranks by matching against the value and getting their index, then sorting by col index
-            let _a = column.options.findIndex((e:any)=>e.value==a[column.name][0])
-            let _b = column.options.findIndex((e:any)=>e.value==b[column.name][0])
+            let _a = column.options.findIndex((e:any)=>e.value==a[column.name] && a[column.name][0])
+            let _b = column.options.findIndex((e:any)=>e.value==b[column.name] && b[column.name][0])
             return _a > _b ? -1 : 1
           })
         }
