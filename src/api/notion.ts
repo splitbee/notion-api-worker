@@ -1,3 +1,4 @@
+
 import {
   JSONData,
   NotionUserType,
@@ -22,23 +23,34 @@ const loadPageChunkBody = {
   verticalColumns: false,
 };
 
+let ctr=0
+
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 const fetchNotionData = async <T extends any>({
   resource,
   body,
   notionToken,
 }: INotionParams): Promise<T> => {
-  const res = await fetch(`${NOTION_API}/${resource}`, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      ...(notionToken && { cookie: `token_v2=${notionToken}` }),
-    },
-
-    body: JSON.stringify(body),
-  });
+  try {
+    console.log('------ fetching notion data?', resource, body, ctr++)
+    const res = await fetch(`${NOTION_API}/${resource}`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        ...(notionToken && { cookie: `token_v2=${notionToken}` }),
+      },
   
-  let json = await res.json()
-  return json;
+      body: JSON.stringify(body),
+    });
+    
+    let json = await res.json()
+    // await delay(1000);
+    return json;
+  } catch(e) {
+    console.error('fetchNotionData error:', e, e.message)
+    throw new Error('Failed to pull data from Notion')
+  }
 };
 
 export const fetchPageById = async (pageId: string, notionToken?: string) => {
@@ -102,25 +114,25 @@ export const fetchNotionUsers = async (
   userIds: string[],
   notionToken?: string
 ) => {
-  const users = await fetchNotionData<{ results: NotionUserType[] }>({
-    resource: "getRecordValues",
-    body: {
-      requests: userIds.map((id) => ({ id, table: "notion_user" })),
-    },
-    notionToken,
-  });
-  if (users && users.results) {
-    return users.results.map((u) => {
-      const user = {
-        id: u.value.id,
-        firstName: u.value.given_name,
-        lastLame: u.value.family_name,
-        fullName: u.value.given_name + " " + u.value.family_name,
-        profilePhoto: u.value.profile_photo,
-      };
-      return user;
-    });
-  }
+  // const users = await fetchNotionData<{ results: NotionUserType[] }>({
+  //   resource: "getRecordValues",
+  //   body: {
+  //     requests: userIds.map((id) => ({ id, table: "notion_user" })),
+  //   },
+  //   notionToken,
+  // });
+  // if (users && users.results) {
+  //   return users.results.map((u) => {
+  //     const user = {
+  //       id: u.value.id,
+  //       firstName: u.value.given_name,
+  //       lastLame: u.value.family_name,
+  //       fullName: u.value.given_name + " " + u.value.family_name,
+  //       profilePhoto: u.value.profile_photo,
+  //     };
+  //     return user;
+  //   });
+  // }
   return [];
 };
 
@@ -131,12 +143,18 @@ export const fetchBlocks = async (
   return await fetchNotionData<LoadPageChunkData>({
     resource: "syncRecordValues",
     body: {
-      recordVersionMap: {
-        block: blockList.reduce((obj, blockId) => {
-          obj[blockId] = -1;
-          return obj;
-        }, {} as { [key: string]: -1 }),
-      },
+      // recordVersionMap: {
+      //   block: blockList.reduce((obj, blockId) => {
+      //     obj[blockId] = -1;
+      //     return obj;
+      //   }, {} as { [key: string]: -1 }),
+      // },
+
+      requests: blockList.map((id) => ({
+        id,
+        table: "block",
+        version: -1,
+      })),
     },
     notionToken,
   });

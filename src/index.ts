@@ -1,4 +1,4 @@
-import {} from "@cloudflare/workers-types";
+// import {} from "@cloudflare/workers-types";
 import { Router, Method } from "tiny-request-router";
 
 import { pageRoute } from "./routes/page";
@@ -48,9 +48,22 @@ router.get("*", async () =>
   )
 );
 
-const cache = (caches as any).default;
-const NOTION_API_TOKEN =
-  typeof NOTION_TOKEN !== "undefined" ? NOTION_TOKEN : undefined;
+
+
+
+// const match = router.match('GET' as Method, '/foobar')
+// if (match) {
+//   // Call the async function of that match
+//   const response = await match.handler()
+//   console.log(response) // => Response('Hello')
+// }
+
+
+
+//cf-only cache
+const cache = undefined; // (caches as any).default;
+const NOTION_API_TOKEN = process.env.NOTION_TOKEN // not implemented yet — use .env later
+  // typeof env.NOTION_TOKEN !== "undefined" ? NOTION_TOKEN : undefined;
 
 const handleRequest = async (fetchEvent: FetchEvent): Promise<Response> => {
   const request = fetchEvent.request;
@@ -83,7 +96,7 @@ const handleRequest = async (fetchEvent: FetchEvent): Promise<Response> => {
       notionToken,
     });
 
-    if (cacheKey) {
+    if (cache && cacheKey) {
       await cache.put(cacheKey, res.clone());
     }
 

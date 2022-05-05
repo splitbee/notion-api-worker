@@ -143,7 +143,7 @@ export async function collectionRoute(req: HandlerRequest) {
       let _op = filter.operator // "string_contains" etc.
       let _type = filter.value && filter.value.type // "exact"
       let _text = filter.value && filter.value.value // text matching against; "filter text"
-      let column = tableProps.find(c=>c.property==property)
+      let column = tableProps.find((c: any)=>c.property==property)
 
       switch (_op) {
         case 'string_contains':
@@ -177,7 +177,7 @@ export async function collectionRoute(req: HandlerRequest) {
           tableData.rows = tableData.rows.filter((row:any)=> row[column.name] && row[column.name].includes(_text))
           break;
         case 'enum_does_not_contain':
-          tableData.rows = tableData.rows.filter(row=> {
+          tableData.rows = tableData.rows.filter((row: any)=> {
             return !row[column.name] || (!row[column.name].includes(_text))
           })
           break;
