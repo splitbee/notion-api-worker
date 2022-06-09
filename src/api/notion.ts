@@ -35,7 +35,7 @@ const fetchNotionData = async <T extends any>({
       method: "POST",
       headers: {
         "content-type": "application/json",
-        "referer": "https://phagedirectory.notion.site/CUE-REDCap-eCRF-Data-Dictionary-Model-ca9b547e6ab5411e96c432024ed61b52",
+        "referer": "https://phagedirectory.notion.site",
         "origin": "https://phagedirectory.notion.site",
         ...(notionToken && { cookie: `token_v2=${notionToken}` }),
       },
