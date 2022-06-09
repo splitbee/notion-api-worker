@@ -129,10 +129,7 @@ export async function collectionRoute(req: HandlerRequest) {
   let query_sort = views[0]['query2'] ? views[0]['query2'].sort : undefined
 
 
-  console.log('?!?!?!', query_sort)
-
-
-
+  // console.log('?!?!?!', query_sort)
 
 
     // filters result array in place
