@@ -27,7 +27,8 @@ export const getNotionValue = (
   switch (type) {
     case "text":
       // return val; // includes formatted content like bold and anchors, but a pain to parse
-      return getTextContent(val);
+      // return getTextContent(val);
+      return getFormattedTextContent(val);
     case "person":
       return (
         val.filter((v) => v.length > 1).map((v) => v[1]![0][1] as string) || []
@@ -87,4 +88,32 @@ export const getNotionValue = (
 
 const getTextContent = (text: DecorationType[]) => {
   return text.reduce((prev, current) => prev + current[0], "");
+};
+
+
+const getFormattedTextContent = (text: DecorationType[]) => {
+  // console.log('---text:', text[0])
+  // return text.reduce((prev, current) => {
+  //   console.log('p/c', prev, current)
+  //   return prev + current[0]}, "");
+  const newtext = text
+    .map(text =>
+      text[1]
+        ? text[1].reduceRight(
+          (av, cv) =>
+          ({
+            i: `<em>${av}</em>`,
+            c: `<code class="notion-inline-code">${av}</code>`,
+            s: `<s>${av}</s>`,
+            b: `<b>${av}</b>`,
+            h: `<span class="notion-${cv[1]}">${av}</span>`,
+            a: `<a class="notion-link" href="${cv[1]}">${av}</a>`,
+          }[cv[0]]),
+          text[0]
+        )
+        : text[0]
+    )
+    .join('')
+
+  return newtext
 };
