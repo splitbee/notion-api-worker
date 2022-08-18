@@ -57,6 +57,16 @@ All public pages can be accessed without authorization. If you want to fetch pri
 
 To obtain your token, login to Notion and open your DevTools and find your cookies. There should be a cookie called `token_v2`, which is used for the authorization.
 
+### Deploys
+
+Deploys are done using [wrangler](https://github.com/cloudflare/wrangler).
+See the wrangler.example.toml file for configuration.
+
+Install wrangler with `https://github.com/cloudflare/wrangler`.
+Configure using `wrangler login`.
+
+After configuring the .toml file, you can deploy with `wrangler publish`.
+
 ## Credits
 
 - [Timo Lins](https://twitter.com/timolins) – Idea, Documentation
