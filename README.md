@@ -1,10 +1,12 @@
 ![Notion API Worker](https://user-images.githubusercontent.com/1440854/79893752-cc448680-8404-11ea-8d19-e0308eb32028.png)
 ![API Version](https://badgen.net/badge/API%20Version/v1/green)
 
+THIS IS A FORK OF [THIS OPEN SOURCE REPOSITORY](https://github.com/splitbee/notion-api-worker)
+
 A **serverless wrapper** for the private Notion API. It provides fast and easy access to your Notion content.
 Ideal to make Notion your CMS.
 
-We provide a hosted version of this project on [`https://notion-api.splitbee.io`](https://notion-api.splitbee.io/). You can also [host it yourself](https://workers.cloudflare.com/). Cloudflare offers a generous free plan with up to 100,000 request per day.
+This project is self-hosted at firstround.cloud on [Cloudflare](https://dash.cloudflare.com/).
 
 _Use with caution. This is based on the private Notion API. We can not gurantee it will stay stable._
 
@@ -49,8 +51,7 @@ Example ([Source Notion Page](https://www.notion.so/splitbee/20720198ca7a4e1b92a
 
 All public pages can be accessed without authorization. If you want to fetch private pages there are two options.
 
-- The recommended way is to host your own worker with the `NOTION_TOKEN` environment variable set. You can find more information in the [Cloudflare Workers documentation](https://developers.cloudflare.com/workers/reference/apis/environment-variables/).
-- Alternatively you can set the `Authorization: Bearer <NOTION_TOKEN>` header to authorize your requests.
+- The recommended way is to host your own worker with the `NOTION_TOKEN` environment variable set. You can find more information in the [Cloudflare Workers documentation](https://developers.cloudflare.com/workers/reference/apis/environment-variables/). This is what we currently do.
 
 ### Receiving the token
 
