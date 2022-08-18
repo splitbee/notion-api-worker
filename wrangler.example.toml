@@ -1,9 +1,16 @@
 name = "notion-cloudflare-worker"
 webpack_config = "webpack.config.js"
 type = "webpack"
-workers_dev = true
+# Uncomment for pushing to a dev worker
+#workers_dev = true
 
+# Get these values from Cloudflare
 account_id = ""
 zone_id = ""
+# This will be pushed as an env variable to Cloudflare.
+# it is the cookie token_v2 for your user when accessing a notion doc
+# This is how we access private docs
+vars = { NOTION_TOKEN = "" }
 
-route = "notion-api.splitbee.io/*"
+# Production route
+route = "firstround.cloud/*"
