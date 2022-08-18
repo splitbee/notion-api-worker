@@ -34,7 +34,7 @@ _Use with caution. This is based on the private Notion API. We can not gurantee 
 
 Example ([Source Notion Page](https://www.notion.so/react-notion-example-2e22de6b770e4166be301490f6ffd420))
 
-[`https://notion-api.splitbee.io/v1/page/2e22de6b770e4166be301490f6ffd420`](https://notion-api.splitbee.io/v1/page/2e22de6b770e4166be301490f6ffd420)
+[`https://firstround.cloud/v1/page/2e22de6b770e4166be301490f6ffd420`](https://firstround.cloud/v1/page/2e22de6b770e4166be301490f6ffd420)
 
 Returns all block data for a given page.
 For example, you can render this data with [`react-notion`](https://github.com/splitbee/react-notion).
@@ -43,9 +43,9 @@ For example, you can render this data with [`react-notion`](https://github.com/s
 
 `/v1/table/<PAGE_ID>`
 
-Example ([Source Notion Page](https://www.notion.so/splitbee/20720198ca7a4e1b92af0a007d3b45a4?v=4206debfc84541d7b4503ebc838fdf1e))
+Example ([Source Notion Page](https://firstround.cloud/20720198ca7a4e1b92af0a007d3b45a4?v=4206debfc84541d7b4503ebc838fdf1e))
 
-[`https://notion-api.splitbee.io/v1/table/20720198ca7a4e1b92af0a007d3b45a4`](https://notion-api.splitbee.io/v1/table/20720198ca7a4e1b92af0a007d3b45a4)
+[`https://firstround.cloud/v1/table/20720198ca7a4e1b92af0a007d3b45a4`](https://firstround.cloud/v1/table/20720198ca7a4e1b92af0a007d3b45a4)
 
 ## Authentication for private pages
 
