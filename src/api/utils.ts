@@ -7,10 +7,10 @@ import {
 } from "./types";
 
 export const idToUuid = (path: string) =>
-  `${path.substr(0, 8)}-${path.substr(8, 4)}-${path.substr(
+  `${path.slice(0, 8)}-${path.slice(8, 4)}-${path.slice(
     12,
     4
-  )}-${path.substr(16, 4)}-${path.substr(20)}`;
+  )}-${path.slice(16, 4)}-${path.slice(20)}`;
 
 export const parsePageId = (id: string) => {
   if (id) {
