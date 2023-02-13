@@ -6,7 +6,6 @@ type = "webpack"
 
 # Get these values from Cloudflare
 account_id = ""
-zone_id = ""
 # This will be pushed as an env variable to Cloudflare.
 # it is the cookie token_v2 for your user when accessing a notion doc
 # This is how we access private docs

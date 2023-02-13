@@ -2,3 +2,6 @@ dist
 node_modules
 worker
 wrangler.toml
+.DS_Store
+src/.DS_Store
+
