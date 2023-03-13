@@ -4,7 +4,7 @@
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
-    "build": "webpack",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider webpack",
     "dev": "wrangler dev",
     "preview": "wrangler preview",
     "deploy": "wrangler publish -e production"
