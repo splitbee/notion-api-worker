@@ -4,6 +4,3 @@ type = "webpack"
 workers_dev = true
 
 account_id = ""
-zone_id = ""
-
-route = "notion-api.splitbee.io/*"

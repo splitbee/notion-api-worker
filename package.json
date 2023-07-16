@@ -11,6 +11,7 @@
     "prod": "wrangler publish"
   },
   "dependencies": {
+    "global": "^4.4.0",
     "tiny-request-router": "^1.2.2"
   },
   "devDependencies": {
@@ -21,6 +22,7 @@
     "ts-loader": "^8.0.1",
     "typescript": "^3.9.7",
     "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.12"
+    "webpack-cli": "^3.3.12",
+    "wrangler": "^3.2.0"
   }
 }

@@ -22,7 +22,9 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "*",
   "Access-Control-Allow-Methods": "GET, HEAD, POST, OPTIONS",
   // "Cache-Control":`public, s-maxage=${30}, max-age=${60*60*0.1}, stale-while-revalidate=${60*4}`, 
-  "Cache-Control":`public, s-maxage=${10}, max-age=${10}, stale-while-revalidate=${10}`, 
+  // 60s fresh cache but 7 day cache; max-age determines "freshness" and swr time is whenever the stlate data gets sent over
+  // "Cache-Control":`public, s-maxage=${10}, max-age=${10}, stale-while-revalidate=${10}`, 
+  "Cache-Control":`public, s-maxage=${60}, max-age=${60}, stale-while-revalidate=${60*60}`, 
 };
 
 const router = new Router<Handler>();
@@ -61,15 +63,15 @@ router.get("*", async () =>
 
 
 //cf-only cache
-const cache = undefined; // (caches as any).default;
-const NOTION_API_TOKEN = process.env.NOTION_TOKEN // not implemented yet — use .env later
+const cache = (caches as any).default;
+//const NOTION_API_TOKEN = process.env.NOTION_TOKEN // not implemented yet — use .env later
   // typeof env.NOTION_TOKEN !== "undefined" ? NOTION_TOKEN : undefined;
 
 const handleRequest = async (fetchEvent: FetchEvent): Promise<Response> => {
   const request = fetchEvent.request;
   const { pathname, searchParams } = new URL(request.url);
   const notionToken =
-    NOTION_API_TOKEN ||
+    // NOTION_API_TOKEN ||
     (request.headers.get("Authorization") || "").split("Bearer ")[1] ||
     undefined;
 

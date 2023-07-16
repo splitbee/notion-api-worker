@@ -14,13 +14,20 @@ export const getTableData = async (
   notionToken?: string,
   raw?: boolean
 ) => {
-  const table = await fetchTableData(
-    collection.value.id,
-    collectionViewId,
-    notionToken
-  );
 
-  const collectionRows = collection.value.schema;
+
+
+  let table: any; // no idea what this is lol
+
+  if(collection) {
+      table = await fetchTableData(
+      collection?.value?.id,
+      collectionViewId,
+      notionToken
+    );
+  }
+
+  const collectionRows = collection?.value.schema;
   const collectionColKeys = Object.keys(collectionRows);
 
   // console.log('>>>>> table block ids?!', table.result)
@@ -38,7 +45,7 @@ export const getTableData = async (
 
   const tableData = tableArr.filter(
     (b) =>
-      b.value && b.value.properties && b.value.parent_id === collection.value.id
+      b.value && b.value.properties && b.value.parent_id === collection?.value.id
   );
 
 
@@ -62,7 +69,10 @@ export const getTableData = async (
   return { rows, schema: collectionRows };
 };
 
-export async function tableRoute(req: HandlerRequest) {
+
+
+
+export const tableRoute = async (req: HandlerRequest) => {
   const pageId = parsePageId(req.params.pageId);
   const page = await fetchPageById(pageId!, req.notionToken);
 

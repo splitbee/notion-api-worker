@@ -84,6 +84,7 @@ export const getCollectionData = async (
 export async function collectionRoute(req: HandlerRequest) {
   const pageId = parsePageId(req.params.pageId);
   const page = await fetchPageById(pageId!, req.notionToken);
+  const pageBlock = page.recordMap.block[pageId!];
 
   if (!page.recordMap.collection)
     return createResponse(
@@ -92,21 +93,37 @@ export async function collectionRoute(req: HandlerRequest) {
       401
     );
 
-  const collection = Object.keys(page.recordMap.collection).map(
-    (k) => page.recordMap.collection[k]
-  )[0];
-
+  let collection
   const views: any[] = []
+  let collectionView: {
+    value: { id: CollectionType["value"]["id"], format: any };
+  }
+  
+
+  if (pageBlock.value.view_ids && pageBlock.value.view_ids?.length > 0) {
+    collectionView = Object.keys(page.recordMap.collection_view).map((k) => {
+      views.push(page.recordMap.collection_view[k]['value'])
+      return page.recordMap.collection_view[k]
+    }).find(view => view.value.id == pageBlock.value.view_ids?.[0]);
+  } else {
+    collectionView = Object.keys(page.recordMap.collection_view).map((k) => {
+      views.push(page.recordMap.collection_view[k]['value'])
+      return page.recordMap.collection_view[k]
+    })[0];
+  }
+
+  if (collectionView) {
+    collection = Object.keys(page.recordMap.collection).map(
+      (k) => page.recordMap.collection[k]
+    ).find(view => view.value.id == collectionView.value.format.collection_pointer.id);;
+  } else {
+    collection = Object.keys(page.recordMap.collection).map(
+      (k) => page.recordMap.collection[k]
+    )[0];
+  }
 
 
 
-  const collectionView: {
-    value: { id: CollectionType["value"]["id"] };
-  } = Object.keys(page.recordMap.collection_view).map((k) => {
-
-    views.push(page.recordMap.collection_view[k]['value'])
-    return page.recordMap.collection_view[k]
-  })[0];
 
   const tableData = await getCollectionData(
     collection,
@@ -114,8 +131,8 @@ export async function collectionRoute(req: HandlerRequest) {
     req.notionToken
   );
 
-  // console.log('table data:', JSON.stringify(collectionView.value))
-  // console.log('view:', JSON.stringify(page.recordMap))
+  // console.log('[collection] table data:', JSON.stringify(collectionView.value))
+  // console.log('[collection] view:', JSON.stringify(page.recordMap))
 
   // clean up the table order
   const tableProps = views[0].format.table_properties
@@ -128,8 +145,6 @@ export async function collectionRoute(req: HandlerRequest) {
   let query_filter = views[0]['query2'] ? views[0]['query2'].filter : undefined
   let query_sort = views[0]['query2'] ? views[0]['query2'].sort : undefined
 
-
-  // console.log('?!?!?!', query_sort)
 
 
     // filters result array in place

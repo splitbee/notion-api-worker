@@ -65,6 +65,7 @@ export type RowContentType =
 export interface BaseValueType {
   id: string;
   type: string;
+  view_ids?: string[];
   version: number;
   created_time: number;
   last_edited_time: number;
