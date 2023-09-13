@@ -1,1 +1,0 @@
-{"error":"Route not found!","routes":["/v1/page/:pageId","/v1/table/:pageId","/v1/user/:pageId","/v1/asset?url=[filename]&blockId=[id]","/v1/:blockId"]}

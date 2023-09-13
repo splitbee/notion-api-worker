@@ -8,7 +8,7 @@ export async function pageRoute(req: HandlerRequest) {
   const pageId = parsePageId(req.params.pageId);
   const page = await fetchPageById(pageId!, req.notionToken);
 
-  // console.log('->>>>>>', JSON.stringify(page,0,2))
+  console.log('->>>>>>', JSON.stringify(page, 0, 2), JSON.stringify(req.params, 0, 2))
 
   if (!req.params.pageId) {
     console.error(`Page not found at [ID:${req.params.pageId}]`)
@@ -102,7 +102,7 @@ export async function pageRoute(req: HandlerRequest) {
       if (collView) {
         coll = Object.keys(collPage.recordMap.collection).map(
           (k) => collPage.recordMap.collection[k]
-        ).find(view => view.value.id == collView.value.format.collection_pointer.id);
+        ).find(view => view.value?.id == collView.value?.format?.collection_pointer?.id);
       } else {
         coll = Object.keys(collPage.recordMap.collection).map(
           (k) => collPage.recordMap.collection[k]
@@ -115,12 +115,17 @@ export async function pageRoute(req: HandlerRequest) {
       // console.log('[page] collection view collections:', JSON.stringify(Object.keys(collPage.recordMap.collection).map(
       //   (k) => collPage.recordMap.collection[k])), '!!!!!!!!!', JSON.stringify(collPage))
 
-      const { rows, schema } = await getTableData(
-        coll,
-        collView.value.id,
-        req.notionToken,
-        true
-      );
+      let rows, schema
+      if (coll && collView && collView?.value?.id) {
+        let data = await getTableData(
+          coll,
+          collView?.value?.id,
+          req.notionToken,
+          true
+        );
+        rows = data.rows
+        schema = data.schema
+      }
 
       // console.log('[page] collection rows:', collView.value.id, rows, schema)
 
@@ -129,7 +134,7 @@ export async function pageRoute(req: HandlerRequest) {
       allBlocks[b] = {
         ...allBlocks[b],
         collection: {
-          title: coll.value.name,
+          title: coll?.value.name,
           schema,
           types: viewIds.map((id) => {
             const col = collPage.recordMap.collection_view[id];

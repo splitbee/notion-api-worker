@@ -30,6 +30,7 @@ const corsHeaders = {
 const router = new Router<Handler>();
 
 router.options("*", () => new Response(null, { headers: corsHeaders }));
+
 router.get("/v1/page/:pageId", pageRoute);
 router.get("/v1/table/:pageId", tableRoute);
 router.get("/v1/collection/:pageId", collectionRoute);

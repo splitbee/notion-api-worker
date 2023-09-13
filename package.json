@@ -7,8 +7,8 @@
     "build": "webpack",
     "dev": "wrangler dev",
     "preview": "wrangler preview",
-    "deploy": "wrangler publish",
-    "prod": "wrangler publish"
+    "deploy": "wrangler deploy",
+    "prod": "wrangler deploy"
   },
   "dependencies": {
     "global": "^4.4.0",

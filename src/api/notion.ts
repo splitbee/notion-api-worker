@@ -104,7 +104,7 @@ export const fetchTableData = async (
     },
     notionToken,
   });
-  // console.log('fetchTableData:', table)
+  console.log('fetchTableData:', table)
   return table;
 };
 

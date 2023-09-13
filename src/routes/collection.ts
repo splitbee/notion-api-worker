@@ -16,6 +16,11 @@ export const getCollectionData = async (
   notionToken?: string,
   raw?: boolean
 ) => {
+
+  console.log('Getting collection data:', collection, collectionViewId, notionToken, raw)
+
+
+
   const table = await fetchTableData(
     collection.value.id,
     collectionViewId,
@@ -81,6 +86,11 @@ export const getCollectionData = async (
 
 
 
+
+
+
+
+
 export async function collectionRoute(req: HandlerRequest) {
   const pageId = parsePageId(req.params.pageId);
   const page = await fetchPageById(pageId!, req.notionToken);
@@ -111,11 +121,17 @@ export async function collectionRoute(req: HandlerRequest) {
       return page.recordMap.collection_view[k]
     })[0];
   }
+  
+  // console.log('flip flup %%_%%1231231232%', pageId, page.recordMap?.block?.[pageId]?.value?.collection_id)
+  // console.log('[RECORDMAP?]', JSON.stringify(page.recordMap,0,2))
+  // console.log('[COLLECTION VIEW?]', JSON.stringify(collectionView,0,2))
 
   if (collectionView) {
+    let collectionId = page.recordMap?.block?.[pageId]?.value?.collection_id
     collection = Object.keys(page.recordMap.collection).map(
       (k) => page.recordMap.collection[k]
-    ).find(view => view.value.id == collectionView.value.format.collection_pointer.id);;
+    // ).find(view => view.value?.id == collectionView.value?.format?.collection_pointer?.id);
+    ).find(view => view.value?.id == collectionId);
   } else {
     collection = Object.keys(page.recordMap.collection).map(
       (k) => page.recordMap.collection[k]
