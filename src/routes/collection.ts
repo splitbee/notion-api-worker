@@ -121,10 +121,14 @@ export async function collectionRoute(req: HandlerRequest) {
       return page.recordMap.collection_view[k]
     })[0];
   }
+
+  // ok the above is doing some crazy stuff; we just want the FIRST view (e.g. the left-most one)
+  // have to rewrap it here into {value: ... } (ugh)
+  collectionView = views[0] ? {value: views[0]} : collectionView
   
-  // console.log('flip flup %%_%%1231231232%', pageId, page.recordMap?.block?.[pageId]?.value?.collection_id)
-  // console.log('[RECORDMAP?]', JSON.stringify(page.recordMap,0,2))
-  // console.log('[COLLECTION VIEW?]', JSON.stringify(collectionView,0,2))
+  console.log('flip flup %%_%%1231231232%', pageId, page.recordMap?.block?.[pageId]?.value?.collection_id)
+  console.log('[RECORDMAP?]', JSON.stringify(page.recordMap,0,2))
+  console.log('[COLLECTION VIEW?]', JSON.stringify(collectionView,0,2), 'looffppopo', JSON.stringify(views,0,2))
 
   if (collectionView) {
     let collectionId = page.recordMap?.block?.[pageId]?.value?.collection_id
@@ -132,7 +136,10 @@ export async function collectionRoute(req: HandlerRequest) {
       (k) => page.recordMap.collection[k]
     // ).find(view => view.value?.id == collectionView.value?.format?.collection_pointer?.id);
     ).find(view => view.value?.id == collectionId);
-  } else {
+  }
+  
+  // if collectionView failed (code is brittle) we get the default view
+  if(!collection) {
     collection = Object.keys(page.recordMap.collection).map(
       (k) => page.recordMap.collection[k]
     )[0];
