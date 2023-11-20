@@ -64,32 +64,13 @@ export const fetchPageById = async (pageId: string, notionToken?: string) => {
   return res;
 };
 
-const queryCollectionBody = {
-  loader: {
-    type: "reducer",
-    reducers: {
-      collection_group_results: {
-        type: "results",
-        limit: 999,
-        loadContentCover: true,
-      },
-      "table:uncategorized:title:count": {
-        type: "aggregation",
-        aggregation: {
-          property: "title",
-          aggregator: "count",
-        },
-      },
-    },
-    searchQuery: "",
-    userTimeZone: "Europe/Vienna",
-  },
-};
-
 export const fetchTableData = async (
   collectionId: string,
   collectionViewId: string,
-  notionToken?: string
+  notionToken: string,
+  property_filter: any = {},
+  sort: any = [],
+  limit: Number,
 ) => {
   const table = await fetchNotionData<CollectionData>({
     resource: "queryCollection",
@@ -100,11 +81,34 @@ export const fetchTableData = async (
       collectionView: {
         id: collectionViewId,
       },
-      ...queryCollectionBody,
+      loader: {
+        type: "reducer",
+        reducers: {
+          collection_group_results: {
+            type: "results",
+            // limit: 50,
+            // limit: 100,
+            // limit: 999,
+            limit: limit,
+            loadContentCover: true,
+          },
+          "table:uncategorized:title:count": {
+            type: "aggregation",
+            aggregation: {
+              property: "title",
+              aggregator: "count",
+            },
+          },
+        },
+        searchQuery: "",
+        userTimeZone: "Europe/Vienna",
+        filter: { operator: "and", filters: property_filter.filters },
+        sort,
+        limit,
+      }
     },
     notionToken,
   });
-  console.log('fetchTableData:', table)
   return table;
 };
 
@@ -121,14 +125,16 @@ export const fetchNotionUsers = async (
   });
   if (users && users.results) {
     return users.results.map((u) => {
-      const user = {
-        id: u.value.id,
-        firstName: u.value.given_name,
-        lastLame: u.value.family_name,
-        fullName: u.value.given_name + " " + u.value.family_name,
-        profilePhoto: u.value.profile_photo,
-      };
-      return user;
+      if(u.value) {
+        const user = {
+          id: u.value.id,
+          firstName: u.value.given_name,
+          lastLame: u.value.family_name,
+          fullName: u.value.given_name + " " + u.value.family_name,
+          profilePhoto: u.value.profile_photo,
+        };
+        return user;
+      }
     });
   }
   return [];

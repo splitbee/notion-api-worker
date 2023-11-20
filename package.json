@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack",
-    "dev": "wrangler dev",
+    "dev": "wrangler dev --port 8787",
     "preview": "wrangler preview",
     "deploy": "wrangler deploy",
     "prod": "wrangler deploy"
@@ -23,6 +23,6 @@
     "typescript": "^3.9.7",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.12",
-    "wrangler": "^3.2.0"
+    "wrangler": "^3.15.0"
   }
 }

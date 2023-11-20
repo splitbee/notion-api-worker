@@ -44,7 +44,15 @@ router.get("*", async () =>
   createResponse(
     {
       error: `Route not found!`,
-      routes: ["/v1/page/:pageId", "/v1/table/:pageId", "/v1/user/:pageId", "/v1/asset?url=[filename]&blockId=[id]", "/v1/:blockId"],
+      routes: [
+        "/v1/page/:pageId", 
+        "/v1/table/:pageId", 
+        "/v1/collection/:pageId", 
+        "/v1/user/:pageId", 
+        "/v1/search", 
+        "/v1/block/:blockId", 
+        "/v1/asset?url=[filename]&blockId=[id]", 
+        "/v1/file"],
     },
     {},
     404
@@ -69,6 +77,8 @@ const cache = (caches as any).default;
   // typeof env.NOTION_TOKEN !== "undefined" ? NOTION_TOKEN : undefined;
 
 const handleRequest = async (fetchEvent: FetchEvent): Promise<Response> => {
+  console.time("handleRequest"); // Start timer
+
   const request = fetchEvent.request;
   const { pathname, searchParams } = new URL(request.url);
   const notionToken =
@@ -111,13 +121,15 @@ const handleRequest = async (fetchEvent: FetchEvent): Promise<Response> => {
     fetchEvent.waitUntil(getResponseAndPersist());
     return response;
   }
+  
+  console.timeEnd("handleRequest"); // End timer
 
   return getResponseAndPersist();
 };
 
 
 // cloudflare workers entry
-self.addEventListener("fetch", async (event: Event) => {
+self.addEventListener("fetch", (event: Event) => {
   const fetchEvent = event as FetchEvent;
   fetchEvent.respondWith(handleRequest(fetchEvent));
 });
