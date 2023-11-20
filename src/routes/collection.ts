@@ -108,7 +108,7 @@ export async function collectionRoute(req: HandlerRequest) {
 
   const pageId = parsePageId(req.params.pageId);
   const viewName = req.searchParams.get("view"); // collection view
-  const limit = Number(req.searchParams.get("limit")) || 150; // collection view
+  const limit = Number(req.searchParams.get("limit")) || 999; // collection view
   const page = await fetchPageById(pageId!, req.notionToken);
   const pageBlock = page.recordMap.block[pageId!];
   let payload: string|null = req.searchParams.get("payload"); // ["rows", "columns"] etc. — array of keys to be returned; will return EVERYTHING if left empty
@@ -174,8 +174,8 @@ export async function collectionRoute(req: HandlerRequest) {
 
 
 
-  let query_filter = collectionView.value?.['query2']?.filter ? collectionView.value?.['query2'].filter : {}
-  let query_sort = collectionView.value?.['query2'].sort ? collectionView.value?.['query2'].sort : {}
+  let query_filter = collectionView.value?.['query2']?.filter ? collectionView.value?.['query2']?.filter : {}
+  let query_sort = collectionView.value?.['query2']?.sort ? collectionView.value?.['query2']?.sort : []
 
   if (collectionView.value?.format.property_filters) {
     if (!query_filter.filters)
