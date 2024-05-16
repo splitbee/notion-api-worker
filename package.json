@@ -7,14 +7,14 @@
     "build": "webpack",
     "dev": "wrangler dev",
     "preview": "wrangler preview",
-    "deploy": "wrangler publish -e production"
+    "deploy": "wrangler deploy src/index.ts"
   },
   "dependencies": {
     "tiny-request-router": "^1.2.2"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^2.0.0",
-    "@cloudflare/wrangler": "^1.10.3",
+    "wrangler": "^3.56.0",
     "@types/node": "^14.0.24",
     "prettier": "^2.0.5",
     "ts-loader": "^8.0.1",
