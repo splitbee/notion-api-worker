@@ -6,11 +6,8 @@ import {
   RowType,
 } from "./types";
 
-export const idToUuid = (path: string) =>
-  `${path.slice(0, 8)}-${path.slice(8, 4)}-${path.slice(
-    12,
-    4
-  )}-${path.slice(16, 4)}-${path.slice(20)}`;
+export const idToUuid = (path: string): string =>
+  `${path.slice(0, 8)}-${path.slice(8, 12)}-${path.slice(12, 16)}-${path.slice(16, 20)}-${path.slice(20)}`;
 
 export const parsePageId = (id: string) => {
   if (id) {
