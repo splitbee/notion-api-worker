@@ -1,4 +1,5 @@
-import { Params } from "tiny-request-router";
+import { Context } from "hono";
+
 
 type BoldFormatType = ["b"];
 type ItalicFormatType = ["i"];
@@ -201,9 +202,4 @@ export interface NotionSearchResultsType {
   total: number;
 }
 
-export interface HandlerRequest {
-  params: Params;
-  searchParams: URLSearchParams;
-  request: Request;
-  notionToken?: string;
-}
+export type HandlerRequest  = Context

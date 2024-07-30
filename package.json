@@ -1,25 +1,24 @@
 {
   "name": "notion-api-worker",
   "version": "0.1.0",
-  "main": "dist/index.js",
-  "license": "MIT",
+  "private": true,
   "scripts": {
-    "build": "webpack",
-    "dev": "wrangler dev",
-    "preview": "wrangler preview",
-    "deploy": "wrangler publish -e production"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
-    "tiny-request-router": "^1.2.2"
+    "hono": "^4.5.3",
+    "next": "14.2.5",
+    "react": "^18",
+    "react-dom": "^18"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^2.0.0",
-    "@cloudflare/wrangler": "^1.10.3",
-    "@types/node": "^14.0.24",
-    "prettier": "^2.0.5",
-    "ts-loader": "^8.0.1",
-    "typescript": "^3.9.7",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.12"
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "prettier": "^3.3.3",
+    "typescript": "^5"
   }
 }
