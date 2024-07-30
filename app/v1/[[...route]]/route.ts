@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { handle } from "hono/vercel";
 
-import { pageRoute } from "../../routes/page";
+import { pageRoute } from "../../routes/notion-page";
 import { tableRoute } from "../../routes/table";
 import { userRoute } from "../../routes/user";
 import { searchRoute } from "../../routes/search";
