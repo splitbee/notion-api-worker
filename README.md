@@ -56,6 +56,10 @@ All public pages can be accessed without authorization. If you want to fetch pri
 
 To obtain your token, login to Notion and open your DevTools and find your cookies. There should be a cookie called `token_v2`, which is used for the authorization.
 
+### How to Self Host This API Worker
+
+There is a mini tutorial to simply host it by yourself. Check it out at [https://dev.to/yehezkielgunawan/how-to-self-host-notion-api-worker-from-splitbee-1lm](https://dev.to/yehezkielgunawan/how-to-self-host-notion-api-worker-from-splitbee-1lm).
+
 ## Credits
 
 - [Timo Lins](https://twitter.com/timolins) – Idea, Documentation
