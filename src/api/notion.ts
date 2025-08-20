@@ -5,6 +5,8 @@ import {
   CollectionData,
   NotionSearchParamsType,
   NotionSearchResultsType,
+  BlockType,
+  RecordMapType,
 } from "./types";
 
 const NOTION_API = "https://www.notion.so/api/v3";
@@ -126,8 +128,8 @@ export const fetchBlocks = async (
   blockList: string[],
   notionToken?: string
 ) => {
-  return await fetchNotionData<LoadPageChunkData>({
-    resource: "syncRecordValues",
+  const response = await fetchNotionData<{ results: BlockType[] }>({
+    resource: "getRecordValues",
     body: {
       requests: blockList.map((id) => ({
         id,
@@ -137,6 +139,26 @@ export const fetchBlocks = async (
     },
     notionToken,
   });
+
+  const recordMap: RecordMapType = {
+    block: {},
+    notion_user: {},
+    collection: {},
+    collection_view: {},
+  };
+
+  if (response.results) {
+    response.results.forEach((block) => {
+      recordMap.block[block.value.id] = block;
+    });
+  }
+
+  return {
+    recordMap,
+    cursor: {
+      stack: [],
+    },
+  } as LoadPageChunkData;
 };
 
 export const fetchNotionSearch = async (
