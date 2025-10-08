@@ -5,6 +5,7 @@ import {
   CollectionData,
   NotionSearchParamsType,
   NotionSearchResultsType,
+  BlockType,
 } from "./types";
 
 const NOTION_API = "https://www.notion.so/api/v3";
@@ -13,6 +14,7 @@ interface INotionParams {
   resource: string;
   body: JSONData;
   notionToken?: string;
+  baseUrl?: string;
 }
 
 const loadPageChunkBody = {
@@ -26,8 +28,9 @@ const fetchNotionData = async <T extends any>({
   resource,
   body,
   notionToken,
+  baseUrl = NOTION_API,
 }: INotionParams): Promise<T> => {
-  const res = await fetch(`${NOTION_API}/${resource}`, {
+  const res = await fetch(`${baseUrl}/${resource}`, {
     method: "POST",
     headers: {
       "content-type": "application/json",
@@ -77,23 +80,41 @@ const queryCollectionBody = {
 export const fetchTableData = async (
   collectionId: string,
   collectionViewId: string,
-  notionToken?: string
+  notionToken?: string,
+  blockData?: BlockType
 ) => {
-  const table = await fetchNotionData<CollectionData>({
-    resource: "queryCollection",
-    body: {
-      collection: {
-        id: collectionId,
-      },
-      collectionView: {
-        id: collectionViewId,
-      },
-      ...queryCollectionBody,
-    },
-    notionToken,
-  });
+  const spaceId = blockData?.value?.space_id;
+  const siteId = blockData?.value?.format?.site_id;
+  
+  const apiBaseUrl = siteId 
+    ? `https://${siteId}.notion.site/api/v3`
+    : NOTION_API;
 
-  return table;
+
+  const requestBody: JSONData = {
+    ...(spaceId ? {
+      source: {
+        type: "collection",
+        id: collectionId,
+        spaceId: spaceId,
+      },
+    } : {}),
+    collection: {
+      id: collectionId,
+    },
+    collectionView: {
+      id: collectionViewId,
+      ...(spaceId && { spaceId: spaceId }),
+    },
+    ...queryCollectionBody,
+  }
+  
+  return fetchNotionData<CollectionData>({
+    resource: "queryCollection",
+    body: requestBody,
+    notionToken,
+    baseUrl: apiBaseUrl,
+  });
 };
 
 export const fetchNotionUsers = async (

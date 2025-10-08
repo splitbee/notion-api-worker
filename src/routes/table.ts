@@ -5,6 +5,7 @@ import {
   CollectionType,
   RowType,
   HandlerRequest,
+  BlockType,
 } from "../api/types";
 import { createResponse } from "../response";
 
@@ -12,12 +13,14 @@ export const getTableData = async (
   collection: CollectionType,
   collectionViewId: string,
   notionToken?: string,
+  blockData?: BlockType,
   raw?: boolean
 ) => {
   const table = await fetchTableData(
     collection.value.id,
     collectionViewId,
-    notionToken
+    notionToken,
+    blockData
   );
 
   const collectionRows = collection.value.schema;
@@ -77,10 +80,14 @@ export async function tableRoute(req: HandlerRequest) {
     (k) => page.recordMap.collection_view[k]
   )[0];
 
+  const blockData = page.recordMap.block[pageId!];
+
   const { rows } = await getTableData(
     collection,
     collectionView.value.id,
-    req.notionToken
+    req.notionToken,
+    blockData
+
   );
 
   return createResponse(rows);
