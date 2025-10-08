@@ -74,6 +74,10 @@ export interface BaseValueType {
   last_edited_by_table: string;
   last_edited_by_id: string;
   content?: string[];
+  space_id?: string;
+  format?: {
+    site_id?: string;
+  };
 }
 
 export interface CollectionType {

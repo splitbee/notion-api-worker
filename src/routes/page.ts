@@ -5,6 +5,7 @@ import { getTableData } from "./table";
 import { BlockType, CollectionType, HandlerRequest } from "../api/types";
 
 export async function pageRoute(req: HandlerRequest) {
+  
   const pageId = parsePageId(req.params.pageId);
   const page = await fetchPageById(pageId!, req.notionToken);
 
@@ -75,6 +76,7 @@ export async function pageRoute(req: HandlerRequest) {
         coll,
         collView.value.id,
         req.notionToken,
+        undefined,
         true
       );
 
