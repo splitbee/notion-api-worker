@@ -272,19 +272,64 @@ export const fetchNotionUsers = async (
 
 export const fetchBlocks = async (
   blockList: string[],
-  notionToken?: string
+  notionToken?: string,
+  blockData?: BlockType
 ) => {
-  return await fetchNotionData<LoadPageChunkData>({
-    resource: "syncRecordValues",
-    body: {
-      requests: blockList.map((id) => ({
-        id,
-        table: "block",
-        version: -1,
-      })),
-    },
-    notionToken,
-  });
+  const spaceId = blockData?.value?.space_id;
+  const siteId = blockData?.value?.format?.site_id;
+
+  const apiBaseUrl = siteId
+    ? `https://${siteId}.notion.site/api/v3`
+    : NOTION_API;
+
+  const requestBody: JSONData = {
+    requests: blockList.map((id) => ({
+      id,
+      table: "block",
+      version: -1,
+    })),
+  };
+
+  let blocks: LoadPageChunkData | undefined;
+  let primaryError: unknown;
+  try {
+    blocks = await fetchNotionData<LoadPageChunkData>({
+      resource: "syncRecordValues",
+      body: requestBody,
+      notionToken,
+      baseUrl: apiBaseUrl,
+      headers: spaceId ? { "x-notion-space-id": spaceId } : undefined,
+    });
+  } catch (err) {
+    primaryError = err;
+  }
+
+  // Fallback: if response has no recordMap/block, retry against default NOTION_API
+  const hasBlocks = Boolean(
+    blocks &&
+      (blocks as any).recordMap &&
+      (blocks as any).recordMap.block &&
+      Object.keys((blocks as any).recordMap.block).length > 0
+  );
+  if (!hasBlocks) {
+    try {
+      blocks = await fetchNotionData<LoadPageChunkData>({
+        resource: "syncRecordValues",
+        body: requestBody,
+        notionToken,
+        baseUrl: NOTION_API,
+        headers: spaceId ? { "x-notion-space-id": spaceId } : undefined,
+      });
+    } catch (fallbackErr) {
+      // If both fail, prefer the first error for context
+      throw (primaryError || fallbackErr);
+    }
+  }
+
+  if (!blocks) {
+    throw new Error("Failed to fetch Notion blocks");
+  }
+  return blocks;
 };
 
 export const fetchNotionSearch = async (

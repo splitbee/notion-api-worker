@@ -9,6 +9,7 @@ export async function pageRoute(req: HandlerRequest) {
   const page = await fetchPageById(pageId!, req.notionToken);
 
   const baseBlocks = page.recordMap.block;
+  const rootBlock = baseBlocks[pageId!];
 
   let allBlocks: { [id: string]: BlockType & { collection?: any } } = {
     ...baseBlocks,
@@ -34,7 +35,7 @@ export async function pageRoute(req: HandlerRequest) {
       break;
     }
 
-    const newBlocks = await fetchBlocks(pendingBlocks, req.notionToken).then(
+    const newBlocks = await fetchBlocks(pendingBlocks, req.notionToken, rootBlock).then(
       (res) => res.recordMap.block
     );
 
@@ -75,7 +76,7 @@ export async function pageRoute(req: HandlerRequest) {
         coll,
         collView.value.id,
         req.notionToken,
-        undefined,
+        rootBlock,
         true
       );
 

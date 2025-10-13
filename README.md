@@ -4,7 +4,7 @@
 A **serverless wrapper** for the private Notion API. It provides fast and easy access to your Notion content.
 Ideal to make Notion your CMS.
 
-If you build with Notion and need advanced forms that write directly to your databases, check out [NoteForms](https://noteforms.com/notion-form) — an official Notion integration. Highlights: full customization ✨, multi‑page forms 🧭, conditional logic 🔀, notifications 📣, edit submissions ✍️ & more!.
+If you build with Notion and need advanced forms that write directly to your databases, check out [NoteForms](https://noteforms.com/?utm_source=notion-api-worker&utm_medium=github&utm_campaign=readme) — an official Notion integration. Highlights: full customization ✨, multi‑page forms 🧭, conditional logic 🔀, notifications 📣, edit submissions ✍️ & more!
 
 _Use with caution. This is based on the private Notion API. We can not gurantee it will stay stable._
 
