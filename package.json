@@ -13,12 +13,12 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^2.0.0",
-    "wrangler": "^3.0.0",
     "@types/node": "^14.0.24",
     "prettier": "^2.0.5",
     "ts-loader": "^8.0.1",
     "typescript": "^3.9.7",
     "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.12"
+    "webpack-cli": "^3.3.12",
+    "wrangler": "4"
   }
 }
