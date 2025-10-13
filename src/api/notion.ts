@@ -5,6 +5,7 @@ import {
   CollectionData,
   NotionSearchParamsType,
   NotionSearchResultsType,
+  BlockType,
 } from "./types";
 
 const NOTION_API = "https://www.notion.so/api/v3";
@@ -13,6 +14,8 @@ interface INotionParams {
   resource: string;
   body: JSONData;
   notionToken?: string;
+  baseUrl?: string;
+  headers?: Record<string, string>;
 }
 
 const loadPageChunkBody = {
@@ -26,17 +29,102 @@ const fetchNotionData = async <T extends any>({
   resource,
   body,
   notionToken,
+  baseUrl = NOTION_API,
+  headers = {},
 }: INotionParams): Promise<T> => {
-  const res = await fetch(`${NOTION_API}/${resource}`, {
+  const url = `${baseUrl}/${resource}`;
+  const requestHeaders: Record<string, string> = {
+    "content-type": "application/json",
+    ...(notionToken ? { cookie: `token_v2=${notionToken}` } : {}),
+    ...headers,
+  };
+
+  const response = await fetch(url, {
     method: "POST",
-    headers: {
-      "content-type": "application/json",
-      ...(notionToken && { cookie: `token_v2=${notionToken}` }),
-    },
+    headers: requestHeaders,
     body: JSON.stringify(body),
   });
 
-  return res.json();
+  const contentType = response.headers.get("content-type") || "";
+  const status = response.status;
+  const statusText = response.statusText;
+  const responseHeaders = Object.fromEntries(response.headers.entries());
+  const redactedRequestHeaders = {
+    ...requestHeaders,
+    ...(requestHeaders.cookie ? { cookie: "token_v2=[redacted]" } : {}),
+  };
+
+  // Always read as text first so we can log on parse errors
+  const rawText = await response.text();
+
+  if (!response.ok) {
+    console.error(
+      "Notion API HTTP error",
+      JSON.stringify(
+        {
+          url,
+          method: "POST",
+          status,
+          statusText,
+          contentType,
+          responseHeaders,
+          requestHeaders: redactedRequestHeaders,
+          requestBody: body,
+          responseText: rawText?.slice(0, 1000),
+        },
+        null,
+        2
+      )
+    );
+    throw new Error(`Notion API error ${status} ${statusText}`);
+  }
+
+  if (!contentType.includes("application/json")) {
+    console.error(
+      "Notion API non-JSON response",
+      JSON.stringify(
+        {
+          url,
+          method: "POST",
+          status,
+          statusText,
+          contentType,
+          responseHeaders,
+          requestHeaders: redactedRequestHeaders,
+          requestBody: body,
+          responseText: rawText?.slice(0, 1000),
+        },
+        null,
+        2
+      )
+    );
+    throw new Error(`Expected JSON but received ${contentType || "unknown content-type"}`);
+  }
+
+  try {
+    return JSON.parse(rawText) as unknown as T;
+  } catch (err: any) {
+    console.error(
+      "Notion API JSON parse error",
+      JSON.stringify(
+        {
+          url,
+          method: "POST",
+          status,
+          statusText,
+          contentType,
+          responseHeaders,
+          requestHeaders: redactedRequestHeaders,
+          requestBody: body,
+          responseText: rawText?.slice(0, 1000),
+          error: String(err && err.message ? err.message : err),
+        },
+        null,
+        2
+      )
+    );
+    throw new Error(`Failed to parse Notion API JSON response: ${status} ${statusText}`);
+  }
 };
 
 export const fetchPageById = async (pageId: string, notionToken?: string) => {
@@ -77,22 +165,82 @@ const queryCollectionBody = {
 export const fetchTableData = async (
   collectionId: string,
   collectionViewId: string,
-  notionToken?: string
-) => {
-  const table = await fetchNotionData<CollectionData>({
-    resource: "queryCollection",
-    body: {
+  notionToken?: string,
+  blockData?: BlockType
+): Promise<CollectionData> => {
+  const spaceId = blockData?.value?.space_id;
+  const siteId = blockData?.value?.format?.site_id;
+
+  const apiBaseUrl = siteId
+    ? `https://${siteId}.notion.site/api/v3`
+    : NOTION_API;
+
+  const requestBody: JSONData = {
+    ...(spaceId ? {
+      source: {
+        type: "collection",
+        blockId: collectionId,
+        spaceId: spaceId,
+      },
+    } : {
       collection: {
         id: collectionId,
       },
-      collectionView: {
-        id: collectionViewId,
-      },
-      ...queryCollectionBody,
+    }),
+    collectionView: {
+      id: collectionViewId,
     },
-    notionToken,
-  });
+    ...queryCollectionBody,
+  };
 
+  let table: CollectionData | undefined;
+  let primaryError: unknown;
+  try {
+    table = await fetchNotionData<CollectionData>({
+      resource: "queryCollection",
+      body: requestBody,
+      notionToken,
+      baseUrl: apiBaseUrl,
+      headers: spaceId ? { "x-notion-space-id": spaceId } : undefined,
+    });
+  } catch (err) {
+    primaryError = err;
+  }
+
+  // Fallback: if response has no recordMap/block, retry against default NOTION_API with plain collection body
+  const hasBlocks = Boolean(table && (table as any).recordMap && (table as any).recordMap.block && Object.keys((table as any).recordMap.block).length > 0);
+  if (!hasBlocks) {
+    const fallbackBody: JSONData = {
+      collection: { id: collectionId },
+      collectionView: { id: collectionViewId },
+      ...queryCollectionBody,
+    };
+
+    console.warn(
+      `Retrying queryCollection against default NOTION_API due to ${table ? "missing blocks" : "primary error"} at site base URL`,
+      {
+        siteBaseUrl: apiBaseUrl,
+        hadPrimaryError: Boolean(primaryError),
+      }
+    );
+    try {
+      table = await fetchNotionData<CollectionData>({
+        resource: "queryCollection",
+        body: fallbackBody,
+        notionToken,
+        baseUrl: NOTION_API,
+        headers: spaceId ? { "x-notion-space-id": spaceId } : undefined,
+      });
+    } catch (fallbackErr) {
+      // If both fail, prefer the first error for context
+      throw (primaryError || fallbackErr);
+    }
+  }
+
+  // At this point ensure table is defined
+  if (!table) {
+    throw new Error("Failed to fetch Notion collection data");
+  }
   return table;
 };
 

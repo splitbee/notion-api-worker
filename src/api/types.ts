@@ -74,6 +74,12 @@ export interface BaseValueType {
   last_edited_by_table: string;
   last_edited_by_id: string;
   content?: string[];
+  // Optional fields observed on collection blocks for site-specific queries
+  space_id?: string;
+  format?: {
+    site_id?: string;
+    [key: string]: any;
+  };
 }
 
 export interface CollectionType {
@@ -164,9 +170,10 @@ export interface CollectionData {
       };
     };
   };
-  result: {
-    reducerResults: {
-      collection_group_results: { blockIds: string[] };
+  // Some responses (e.g., site-specific endpoints) may omit reducerResults
+  result?: {
+    reducerResults?: {
+      collection_group_results?: { blockIds: string[] };
     };
   };
 }

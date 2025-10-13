@@ -75,6 +75,7 @@ export async function pageRoute(req: HandlerRequest) {
         coll,
         collView.value.id,
         req.notionToken,
+        undefined,
         true
       );
 
