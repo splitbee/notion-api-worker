@@ -4,9 +4,30 @@
 A **serverless wrapper** for the private Notion API. It provides fast and easy access to your Notion content.
 Ideal to make Notion your CMS.
 
-We provide a hosted version of this project on [`https://notion-api.splitbee.io`](https://notion-api.splitbee.io/). You can also [host it yourself](https://workers.cloudflare.com/). Cloudflare offers a generous free plan with up to 100,000 request per day.
+If you build with Notion and need advanced forms that write directly to your databases, check out [NoteForms](https://noteforms.com/notion-form) — an official Notion integration. Highlights: full customization ✨, multi‑page forms 🧭, conditional logic 🔀, notifications 📣, edit submissions ✍️ & more!.
 
 _Use with caution. This is based on the private Notion API. We can not gurantee it will stay stable._
+
+## About this fork
+
+This fork fixes a regression where the `/v1/table/:id` endpoint could return 500 errors on Cloudflare Workers. The fix detects when Notion collections are hosted behind a site-specific domain (e.g. `*.notion.site/api/v3`) and sends the proper headers, while gracefully falling back to the default Notion API if needed. It also adds improved diagnostics for non‑JSON responses and HTTP errors.
+
+For background, see the upstream project and issue:
+
+- Original repo: https://github.com/splitbee/notion-api-worker
+- Discussion: https://github.com/splitbee/notion-api-worker/issues/89
+
+### Hosted endpoint (no deployment needed)
+
+If you don’t want to deploy to Cloudflare yourself, you can use this maintained instance:
+
+Base URL: `https://notion-api-worker.notionforms.workers.dev`
+
+Example:
+
+`https://notion-api-worker.notionforms.workers.dev/v1/table/1caa631bec208045866af7d447654132`
+
+This is provided as a convenience and will be maintained on a best‑effort basis. For production or private content, prefer self‑hosting and setting your own `NOTION_TOKEN`.
 
 ## Features
 
@@ -56,8 +77,33 @@ All public pages can be accessed without authorization. If you want to fetch pri
 
 To obtain your token, login to Notion and open your DevTools and find your cookies. There should be a cookie called `token_v2`, which is used for the authorization.
 
+## Deploy to Cloudflare Workers (quick start)
+
+Prerequisites:
+
+- Node.js and `yarn` or `npm`
+- Cloudflare account and Wrangler v4 (`npm i -g wrangler`)
+
+Steps:
+
+1. Install dependencies: `yarn` (or `npm install`)
+2. Configure Cloudflare:
+   - Copy `wrangler.example.toml` to `wrangler.toml` (or edit the existing one)
+   - Set `name` to your Worker name and keep `workers_dev = true` for a `.workers.dev` preview. Optionally set `route` and `zone_id` for a custom domain
+3. (Optional) Set secret for private pages: `wrangler secret put NOTION_TOKEN` and paste your Notion `token_v2`
+4. Deploy: `yarn deploy` (or `wrangler deploy`)
+5. Local dev: `yarn dev` (or `wrangler dev`)
+
+Endpoints after deploy:
+
+- `/v1/page/<PAGE_ID>`
+- `/v1/table/<PAGE_ID>`
+- `/v1/user/<USER_ID>`
+- `/v1/search?query=<q>&ancestorId=<pageId>`
+
 ## Credits
 
 - [Timo Lins](https://twitter.com/timolins) – Idea, Documentation
 - [Tobias Lins](https://twitter.com/linstobias) – Code
 - [Travis Fischer](https://twitter.com/transitive_bs) – Code
+- JhumanJ (NoteForms) – Fork maintenance and Cloudflare fixes
