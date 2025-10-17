@@ -4,7 +4,7 @@
 A **serverless wrapper** for the private Notion API. It provides fast and easy access to your Notion content.
 Ideal to make Notion your CMS.
 
-We provide a hosted version of this project on [`https://notion-api.splitbee.io`](https://notion-api.splitbee.io/). You can also [host it yourself](https://workers.cloudflare.com/). Cloudflare offers a generous free plan with up to 100,000 request per day.
+We provide a hosted version of this project on [`https://notion-api.splitbee.io`](https://notion-api.splitbee.io/). You can also [host it yourself on Vercel](https://vercel.com/?ref=notion-api-worker). Vercel offers a generous free plan.
 
 _Use with caution. This is based on the private Notion API. We can not gurantee it will stay stable._
 
@@ -49,7 +49,7 @@ Example ([Source Notion Page](https://www.notion.so/splitbee/20720198ca7a4e1b92a
 
 All public pages can be accessed without authorization. If you want to fetch private pages there are two options.
 
-- The recommended way is to host your own worker with the `NOTION_TOKEN` environment variable set. You can find more information in the [Cloudflare Workers documentation](https://developers.cloudflare.com/workers/reference/apis/environment-variables/).
+- The recommended way is to host your own instance with the `NOTION_TOKEN` environment variable set. You can find more information in the [Vercel environment variables documentation](https://vercel.com/docs/environment-variables).
 - Alternatively you can set the `Authorization: Bearer <NOTION_TOKEN>` header to authorize your requests.
 
 ### Receiving the token
