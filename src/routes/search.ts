@@ -1,18 +1,24 @@
-import { fetchNotionSearch } from "../api/notion";
-import { createResponse } from "../response";
-import { HandlerRequest } from "../api/types";
-import { parsePageId } from "../api/utils";
+import { fetchNotionSearch } from "../notion-api/notion.js";
+import { HandlerRequest } from "../notion-api/types.js";
+import { parsePageId } from "../notion-api/utils.js";
+import { getNotionToken } from "../utils/index.js";
+import { createResponse } from "../utils/response.js";
 
-export async function searchRoute(req: HandlerRequest) {
-  const ancestorId = parsePageId(req.searchParams.get("ancestorId") || "");
-  const query = req.searchParams.get("query") || "";
-  const limit = Number(req.searchParams.get("limit") || 20);
+export async function searchRoute(c: HandlerRequest) {
+  const notionToken = getNotionToken(c);
+
+  const ancestorId = parsePageId(c.req.query("ancestorId") || "");
+  const query = c.req.query("query") || "";
+  const limit = Number(c.req.query("limit") || 20);
 
   if (!ancestorId) {
     return createResponse(
       { error: 'missing required "ancestorId"' },
-      { "Content-Type": "application/json" },
-      400
+      {
+        headers: { "Content-Type": "application/json" },
+        statusCode: 400,
+        request: c,
+      }
     );
   }
 
@@ -22,8 +28,10 @@ export async function searchRoute(req: HandlerRequest) {
       query,
       limit,
     },
-    req.notionToken
+    notionToken
   );
 
-  return createResponse(results);
+  return createResponse(results, {
+    request: c,
+  });
 }

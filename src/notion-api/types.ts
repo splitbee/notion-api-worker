@@ -1,4 +1,4 @@
-import { Params } from "tiny-request-router";
+import { Context } from "hono";
 
 type BoldFormatType = ["b"];
 type ItalicFormatType = ["i"];
@@ -11,7 +11,7 @@ type DateFormatType = [
     type: "date";
     start_date: string;
     date_format: string;
-  }
+  },
 ];
 type UserFormatType = ["u", string];
 type PageFormatType = ["p", string];
@@ -201,9 +201,4 @@ export interface NotionSearchResultsType {
   total: number;
 }
 
-export interface HandlerRequest {
-  params: Params;
-  searchParams: URLSearchParams;
-  request: Request;
-  notionToken?: string;
-}
+export type HandlerRequest = Context;

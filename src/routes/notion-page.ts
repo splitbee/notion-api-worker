@@ -1,12 +1,15 @@
-import { fetchPageById, fetchBlocks } from "../api/notion";
-import { parsePageId } from "../api/utils";
-import { createResponse } from "../response";
-import { getTableData } from "./table";
-import { BlockType, CollectionType, HandlerRequest } from "../api/types";
+import { fetchPageById, fetchBlocks } from "../notion-api/notion.js";
+import { parsePageId } from "../notion-api/utils.js";
+import { BlockType, CollectionType, HandlerRequest } from "../notion-api/types.js";
+import { getTableData } from "./table.js";
+import { createResponse } from "../utils/response.js";
+import { getNotionToken } from "../utils/index.js";
 
-export async function pageRoute(req: HandlerRequest) {
-  const pageId = parsePageId(req.params.pageId);
-  const page = await fetchPageById(pageId!, req.notionToken);
+export async function pageRoute(c: HandlerRequest) {
+  const pageId = parsePageId(c.req.param("pageId"));
+  const notionToken = getNotionToken(c);
+
+  const page = await fetchPageById(pageId!, notionToken);
 
   const baseBlocks = page.recordMap.block;
 
@@ -34,7 +37,7 @@ export async function pageRoute(req: HandlerRequest) {
       break;
     }
 
-    const newBlocks = await fetchBlocks(pendingBlocks, req.notionToken).then(
+    const newBlocks = await fetchBlocks(pendingBlocks, notionToken).then(
       (res) => res.recordMap.block
     );
 
@@ -55,11 +58,13 @@ export async function pageRoute(req: HandlerRequest) {
     const pendingCollections = allBlockKeys.flatMap((blockId) => {
       const block = allBlocks[blockId];
 
-      return (block.value && block.value.type === "collection_view") ? [block.value.id] : [];
+      return block.value && block.value.type === "collection_view"
+        ? [block.value.id]
+        : [];
     });
 
     for (let b of pendingCollections) {
-      const collPage = await fetchPageById(b!, req.notionToken);
+      const collPage = await fetchPageById(b!, notionToken);
 
       const coll = Object.keys(collPage.recordMap.collection).map(
         (k) => collPage.recordMap.collection[k]
@@ -74,7 +79,7 @@ export async function pageRoute(req: HandlerRequest) {
       const { rows, schema } = await getTableData(
         coll,
         collView.value.id,
-        req.notionToken,
+        notionToken,
         true
       );
 
@@ -95,5 +100,7 @@ export async function pageRoute(req: HandlerRequest) {
     }
   }
 
-  return createResponse(allBlocks);
+  return createResponse(allBlocks, {
+    request: c,
+  });
 }

@@ -1,9 +1,13 @@
-import { fetchNotionUsers } from "../api/notion";
-import { HandlerRequest } from "../api/types";
-import { createResponse } from "../response";
+import { fetchNotionUsers } from "../notion-api/notion.js";
+import { HandlerRequest } from "../notion-api/types.js";
+import { getNotionToken } from "../utils/index.js";
+import { createResponse } from "../utils/response.js";
 
-export async function userRoute(req: HandlerRequest) {
-  const users = await fetchNotionUsers([req.params.userId], req.notionToken);
+export async function userRoute(c: HandlerRequest) {
+  const users = await fetchNotionUsers(
+    [c.req.param("userId")],
+    getNotionToken(c)
+  );
 
-  return createResponse(users[0]);
+  return createResponse(users[0], { request: c });
 }
