@@ -13,6 +13,7 @@ interface INotionParams {
   resource: string;
   body: JSONData;
   notionToken?: string;
+  headers?: Record<string, string>;
 }
 
 const loadPageChunkBody = {
@@ -26,12 +27,14 @@ const fetchNotionData = async <T extends any>({
   resource,
   body,
   notionToken,
+  headers,
 }: INotionParams): Promise<T> => {
   const res = await fetch(`${NOTION_API}/${resource}`, {
     method: "POST",
     headers: {
       "content-type": "application/json",
       ...(notionToken && { cookie: `token_v2=${notionToken}` }),
+      ...headers,
     },
     body: JSON.stringify(body),
   });
@@ -77,8 +80,14 @@ const queryCollectionBody = {
 export const fetchTableData = async (
   collectionId: string,
   collectionViewId: string,
-  notionToken?: string
+  notionToken?: string,
+  spaceId?: string
 ) => {
+  const headers: Record<string, string> = {};
+  if (spaceId) {
+    headers["x-notion-space-id"] = spaceId;
+  }
+
   const table = await fetchNotionData<CollectionData>({
     resource: "queryCollection",
     body: {
@@ -91,6 +100,7 @@ export const fetchTableData = async (
       ...queryCollectionBody,
     },
     notionToken,
+    headers,
   });
 
   return table;

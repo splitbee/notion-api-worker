@@ -12,14 +12,20 @@ importers:
         specifier: ^4.10.0
         version: 4.10.0
     devDependencies:
+      '@types/node':
+        specifier: ^24.8.1
+        version: 24.8.1
       prettier:
         specifier: ^3.3.3
         version: 3.6.2
       typescript:
-        specifier: ^5
+        specifier: ^5.9.3
         version: 5.9.3
 
 packages:
+
+  '@types/node@24.8.1':
+    resolution: {integrity: sha512-alv65KGRadQVfVcG69MuB4IzdYVpRwMG/mq8KWOaoOdyY617P5ivaDiMCGOFDWD2sAn5Q0mR3mRtUOgm99hL9Q==}
 
   hono@4.10.0:
     resolution: {integrity: sha512-V/S2IyKL6fk5+bEjiQzg74r5BglqAwU20IX3WjdTUFgvmtSqAZjSxN/Zb5lr6/JXVmH0aqkqOq++3UgzOi9+4Q==}
@@ -35,10 +41,19 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
+  undici-types@7.14.0:
+    resolution: {integrity: sha512-QQiYxHuyZ9gQUIrmPo3IA+hUl4KYk8uSA7cHrcKd/l3p1OTpZcM0Tbp9x7FAtXdAYhlasd60ncPpgu6ihG6TOA==}
+
 snapshots:
+
+  '@types/node@24.8.1':
+    dependencies:
+      undici-types: 7.14.0
 
   hono@4.10.0: {}
 
   prettier@3.6.2: {}
 
   typescript@5.9.3: {}
+
+  undici-types@7.14.0: {}
