@@ -5,7 +5,7 @@ import {
   CollectionData,
   NotionSearchParamsType,
   NotionSearchResultsType,
-} from "./types";
+} from "./types.js";
 
 const NOTION_API = "https://www.notion.so/api/v3";
 
@@ -39,7 +39,7 @@ const fetchNotionData = async <T extends any>({
     body: JSON.stringify(body),
   });
 
-  return res.json();
+  return res.json() as Promise<T>;
 };
 
 export const fetchPageById = async (pageId: string, notionToken?: string) => {

@@ -1,4 +1,4 @@
-import { HandlerRequest } from "../notion-api/types";
+import { HandlerRequest } from "../notion-api/types.js";
 
 export const getNotionToken = (c: HandlerRequest) => {
   return (

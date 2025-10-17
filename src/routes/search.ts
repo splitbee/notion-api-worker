@@ -1,8 +1,8 @@
-import { fetchNotionSearch } from "../notion-api/notion";
-import { HandlerRequest } from "../notion-api/types";
-import { parsePageId } from "../notion-api/utils";
-import { getNotionToken } from "../utils";
-import { createResponse } from "../utils/response";
+import { fetchNotionSearch } from "../notion-api/notion.js";
+import { HandlerRequest } from "../notion-api/types.js";
+import { parsePageId } from "../notion-api/utils.js";
+import { getNotionToken } from "../utils/index.js";
+import { createResponse } from "../utils/response.js";
 
 export async function searchRoute(c: HandlerRequest) {
   const notionToken = getNotionToken(c);

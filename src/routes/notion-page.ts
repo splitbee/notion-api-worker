@@ -1,9 +1,9 @@
-import { fetchPageById, fetchBlocks } from "../notion-api/notion";
-import { parsePageId } from "../notion-api/utils";
-import { BlockType, CollectionType, HandlerRequest } from "../notion-api/types";
-import { getTableData } from "./table";
-import { createResponse } from "../utils/response";
-import { getNotionToken } from "../utils";
+import { fetchPageById, fetchBlocks } from "../notion-api/notion.js";
+import { parsePageId } from "../notion-api/utils.js";
+import { BlockType, CollectionType, HandlerRequest } from "../notion-api/types.js";
+import { getTableData } from "./table.js";
+import { createResponse } from "../utils/response.js";
+import { getNotionToken } from "../utils/index.js";
 
 export async function pageRoute(c: HandlerRequest) {
   const pageId = parsePageId(c.req.param("pageId"));

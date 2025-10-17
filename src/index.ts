@@ -1,9 +1,9 @@
 import { Hono } from "hono";
 
-import { pageRoute } from "./routes/notion-page";
-import { tableRoute } from "./routes/table";
-import { userRoute } from "./routes/user";
-import { searchRoute } from "./routes/search";
+import { pageRoute } from "./routes/notion-page.js";
+import { tableRoute } from "./routes/table.js";
+import { userRoute } from "./routes/user.js";
+import { searchRoute } from "./routes/search.js";
 
 const app = new Hono().basePath("/v1");
 

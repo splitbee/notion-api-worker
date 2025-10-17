@@ -2,16 +2,16 @@ import {
   fetchPageById,
   fetchTableData,
   fetchNotionUsers,
-} from "../notion-api/notion";
-import { parsePageId, getNotionValue } from "../notion-api/utils";
+} from "../notion-api/notion.js";
+import { parsePageId, getNotionValue } from "../notion-api/utils.js";
 import {
   RowContentType,
   CollectionType,
   RowType,
   HandlerRequest,
-} from "../notion-api/types";
-import { createResponse } from "../utils/response";
-import { getNotionToken } from "../utils";
+} from "../notion-api/types.js";
+import { createResponse } from "../utils/response.js";
+import { getNotionToken } from "../utils/index.js";
 
 export const getTableData = async (
   collection: CollectionType,
