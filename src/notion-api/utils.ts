@@ -81,4 +81,3 @@ export const getNotionValue = (
 const getTextContent = (text: DecorationType[]) => {
   return text.reduce((prev, current) => prev + current[0], "");
 };
-
