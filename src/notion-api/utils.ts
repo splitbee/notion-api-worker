@@ -1,4 +1,4 @@
-import { DecorationType, ColumnType, RowContentType, RowType } from "./types";
+import { DecorationType, ColumnType, RowContentType, RowType } from "./types.js";
 
 export const idToUuid = (path: string): string =>
   `${path.slice(0, 8)}-${path.slice(8, 12)}-${path.slice(12, 16)}-${path.slice(16, 20)}-${path.slice(20)}`;

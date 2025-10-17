@@ -1,4 +1,4 @@
-import { HandlerRequest, JSONData } from "../notion-api/types";
+import { HandlerRequest, JSONData } from "../notion-api/types.js";
 
 export const createResponse = (
   body: JSONData | any,
